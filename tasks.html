@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Tasks — Cadence</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1>My Tasks</h1>
+        <div class="header-sub" id="tasks-header-sub">Andrew &nbsp;·&nbsp; 5 tasks this week &nbsp;·&nbsp; 1 done</div>
+      </div>
+      <div class="flex items-center gap-8">
+        <button class="btn btn-primary btn-sm" onclick="openModal('add-task-modal')">+ Add task</button>
+      </div>
+    </div>
+
+    <div class="page-body">
+
+      <!-- Week navigator -->
+      <div class="week-nav" id="week-nav">
+        <button class="week-nav-btn" onclick="shiftWeek(-1)">‹</button>
+        <div class="week-nav-center" id="week-nav-center">
+          <div id="wn-label">This week</div>
+          <div class="wn-sub" id="wn-dates">16 – 20 March 2026</div>
+        </div>
+        <button class="week-nav-btn" onclick="shiftWeek(1)">›</button>
+      </div>
+
+      <!-- Content area — swapped by JS -->
+      <div id="tasks-content"></div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Add task modal -->
+<div class="modal-overlay" id="add-task-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div><h2>Add task</h2></div>
+      <button class="modal-close" onclick="closeModal('add-task-modal')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Task title</label>
+        <input type="text" class="form-input" placeholder="What needs to get done?">
+      </div>
+      <div class="flex gap-12">
+        <div class="form-group flex-1">
+          <label class="form-label">Week</label>
+          <select class="form-input form-select">
+            <option>This week (16 Mar)</option>
+            <option>Next week (23 Mar)</option>
+          </select>
+        </div>
+        <div class="form-group flex-1">
+          <label class="form-label">Tier</label>
+          <select class="form-input form-select">
+            <option>Tier 1 — Must finish</option>
+            <option selected>Tier 2 — Standard</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group mb-0">
+        <label class="form-label">Linked goal (optional)</label>
+        <select class="form-input form-select">
+          <option value="">— none —</option>
+          <option>Scale revenue to $10M ARR</option>
+          <option>Launch new enterprise tier</option>
+          <option>Implement quarterly OKR process</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('add-task-modal')">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="closeModal('add-task-modal')">Add task</button>
+    </div>
+  </div>
+</div>
+
+<script src="nav.js"></script>
+<script>
+
+// ── WEEK DATA ─────────────────────────────────────────────────
+// weekOffset 0 = current week. Negative = past, positive = future.
+const WEEKS = {
+  '-2': {
+    label: '2–6 March 2026',
+    summary: '5 tasks &nbsp;·&nbsp; 4 done &nbsp;·&nbsp; 80%',
+    past: true,
+    tier1: [
+      { title: 'Investor deck — Series A prep', status: 'done', tag: 'Strategic', goal: 'Scale revenue to $10M ARR' },
+      { title: 'Q1 forecast update',            status: 'done', tag: 'Strategic' },
+    ],
+    tier2: [
+      { title: '1:1 catch-up: Luke',         status: 'done',     tag: 'Operational' },
+      { title: 'Team OKR check-in',           status: 'done',     tag: 'Operational' },
+      { title: 'Accounts payable review',     status: 'todo',     tag: 'Operational', movedNote: '→ Moved to next week' },
+    ]
+  },
+  '-1': {
+    label: '9–13 March 2026',
+    summary: '6 tasks &nbsp;·&nbsp; 5 done &nbsp;·&nbsp; 83%',
+    past: true,
+    tier1: [
+      { title: 'Board deck first draft',       status: 'done', tag: 'Strategic', goal: 'Scale revenue to $10M ARR' },
+      { title: 'Accounts payable review',      status: 'done', tag: 'Operational' },
+    ],
+    tier2: [
+      { title: '1:1 catch-up: Dave',           status: 'done',  tag: 'Operational' },
+      { title: 'OKR tracker update',           status: 'done',  tag: 'Operational', goal: 'Implement quarterly OKR process' },
+      { title: 'Q1 board pack financials',     status: 'todo',  tag: 'Operational', movedNote: '→ Moved to next week' },
+      { title: 'Investor email responses',     status: 'todo',  tag: 'Operational', movedNote: '→ Moved to next week' },
+    ]
+  },
+  '0': {
+    label: '16–20 March 2026',
+    summary: '5 tasks this week &nbsp;·&nbsp; 1 done',
+    past: false,
+    tier1: [
+      { title: 'Prepare board deck',       status: 'progress', tag: 'Strategic', goal: 'Scale revenue to $10M ARR' },
+      { title: 'Q1 board pack financials', status: 'todo',     tag: 'Operational' },
+    ],
+    tier2: [
+      { title: '1:1 catch-up: Luke',       status: 'done',     tag: 'Operational' },
+      { title: 'Investor email responses', status: 'todo',     tag: 'Operational' },
+      { title: 'OKR tracker update',       status: 'todo',     tag: 'Operational', goal: 'Implement quarterly OKR process' },
+    ],
+    overdue: { title: 'Investor deck for Series A prep', tag: 'Strategic' }
+  },
+  '1': {
+    label: '23–27 March 2026',
+    summary: '2 tasks planned',
+    past: false,
+    tier1: [],
+    tier2: [
+      { title: 'Board meeting follow-up actions', status: 'todo', tag: 'Operational' },
+      { title: 'Q2 planning kickoff prep',        status: 'todo', tag: 'Strategic', goal: 'Implement quarterly OKR process' },
+    ]
+  },
+  '2': {
+    label: '30 Mar – 3 April 2026',
+    summary: '1 task planned',
+    past: false,
+    tier1: [],
+    tier2: [
+      { title: 'Q2 OKR draft + team alignment', status: 'todo', tag: 'Strategic', goal: 'Implement quarterly OKR process' },
+    ]
+  }
+};
+
+// ── STATE ─────────────────────────────────────────────────────
+let weekOffset = 0;
+
+// ── RENDER ────────────────────────────────────────────────────
+function renderWeek() {
+  const w = WEEKS[String(weekOffset)];
+  if (!w) {
+    document.getElementById('tasks-content').innerHTML =
+      `<div style="padding:32px;text-align:center;color:var(--mid);font-size:13px">No data for this week.</div>`;
+    return;
+  }
+
+  // Update nav
+  const isCurrentWeek = weekOffset === 0;
+  const isPast        = weekOffset < 0;
+  document.getElementById('wn-dates').textContent = w.label;
+  document.getElementById('wn-label').innerHTML   = isCurrentWeek
+    ? 'This week'
+    : isPast
+      ? `Week of ${w.label.split('–')[0].trim()} <span class="wn-past-badge">Past</span>`
+      : `Week of ${w.label.split('–')[0].trim()}`;
+  document.getElementById('tasks-header-sub').innerHTML = `Andrew &nbsp;·&nbsp; ${w.summary}`;
+
+  let html = '';
+
+  // Suggestion strip (only for current week)
+  if (isCurrentWeek) {
+    html += `<div class="suggestion-strip mb-20">
+      <span>💡 You have no Strategic focus tasks this week — consider adding one from your goals.</span>
+      <a href="goals.html" style="font-style:normal;font-weight:700;color:var(--purple);font-size:12px;white-space:nowrap">View goals →</a>
+    </div>`;
+  }
+
+  // Week heading with count
+  const doneCount = [...w.tier1, ...w.tier2].filter(t => t.status === 'done').length;
+  const totalCount = w.tier1.length + w.tier2.length;
+  html += `<div class="flex items-center justify-between mb-12">
+    <div class="section-heading" style="margin-bottom:0">${isCurrentWeek ? 'This week' : isPast ? 'Past week' : 'Upcoming week'} &nbsp;<span style="font-weight:500;text-transform:none;letter-spacing:0;color:var(--mid);font-size:12px">${w.label}</span></div>
+    ${isPast
+      ? `<span class="tag tag-default" style="color:#166534">${doneCount} / ${totalCount} done</span>`
+      : isCurrentWeek
+        ? `<span class="tag tag-default">${doneCount} / ${totalCount} done</span>`
+        : `<span class="tag tag-default">${totalCount} planned</span>`
+    }
+  </div>`;
+
+  // Overdue (current week only)
+  if (isCurrentWeek && w.overdue) {
+    html += `<div class="alert-banner alert-overload mb-12" style="cursor:pointer" onclick="toggleSection('overdue-section')">
+      <span class="alert-icon">⚠️</span>
+      <span class="alert-text">You have 1 overdue task from last week.</span>
+      <button class="btn btn-sm btn-ghost" style="border-color:#FCD34D;color:#92400E">Show</button>
+    </div>
+    <div id="overdue-section" class="hidden mb-20">
+      <div class="task-card" style="border-left:3px solid #f87171;background:#FFF5F5">
+        <button class="status-btn todo" onclick="cycleStatus(this)"></button>
+        <div class="task-body">
+          <div class="task-title">${w.overdue.title}</div>
+          <div class="task-meta">
+            <span class="tag tag-red">Overdue 5 days</span>
+            <span class="tag tag-default">Strategic</span>
+            <button class="btn btn-xs btn-ghost" style="margin-left:4px">Move to this week</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  // Task card
+  html += `<div class="card" style="padding:0;overflow:hidden;margin-bottom:20px">`;
+
+  // Tier 1
+  if (w.tier1.length > 0) {
+    html += `<div style="padding:12px 16px;border-bottom:1px solid var(--border);background:#FDFFF5">
+      <div class="tier-2-label" style="margin-bottom:10px;display:flex;align-items:center;gap:6px">
+        <span class="tier-1-badge">★ Tier 1 — Must finish</span>
+      </div>`;
+    w.tier1.forEach((t, i) => { html += taskRow(t, i < w.tier1.length - 1, isPast); });
+    html += `</div>`;
+  }
+
+  // Tier 2
+  html += `<div style="padding:12px 16px">
+    <div class="tier-2-label" style="margin-bottom:10px">Tier 2 — Standard</div>`;
+  w.tier2.forEach((t, i) => { html += taskRow(t, i < w.tier2.length - 1, isPast); });
+  html += `</div></div>`;
+
+  document.getElementById('tasks-content').innerHTML = html;
+}
+
+function taskRow(t, addMargin, isPast) {
+  const isDone     = t.status === 'done';
+  const isMoved    = !!t.movedNote;
+  const cardClass  = isDone ? 'task-card done-card' : 'task-card';
+  const statusClass = t.status === 'progress' ? 'status-btn progress'
+                    : isDone                  ? 'status-btn done'
+                    :                           'status-btn todo';
+  const badgeClass  = t.status === 'progress' ? 'status-badge status-progress'
+                    : isDone                  ? 'status-badge status-done'
+                    :                           'status-badge status-todo';
+  const badgeLabel  = t.status === 'progress' ? '<span class="status-dot progress"></span> In progress'
+                    : isDone                  ? '<span class="status-dot done"></span> Done'
+                    :                           '<span class="status-dot todo"></span> To do';
+  const dotClass    = t.status === 'progress' ? 'progress' : isDone ? 'done' : 'todo';
+
+  let meta = '';
+  if (t.goal) meta += `<span class="goal-link">${t.goal}</span>`;
+  if (t.tag)  meta += `<span class="tag ${t.tag === 'Strategic' ? 'tag-default' : 'tag-default'}">${t.tag}</span>`;
+  if (isMoved) meta += `<span class="tag tag-purple" style="font-size:9px">${t.movedNote}</span>`;
+  else         meta += `<span class="${badgeClass}">${badgeLabel}</span>`;
+
+  const dimStyle = (isPast && !isDone) ? 'opacity:0.6;' : '';
+
+  return `<div class="${cardClass}" style="${addMargin ? 'margin-bottom:6px;' : ''}${dimStyle}">
+    <button class="${statusClass}" onclick="${isPast ? '' : 'cycleStatus(this)'}"></button>
+    <div class="task-body">
+      <div class="task-title"${isDone ? ' style="text-decoration:line-through;color:var(--mid)"' : ''}>${t.title}</div>
+      <div class="task-meta">${meta}</div>
+    </div>
+  </div>`;
+}
+
+function shiftWeek(delta) {
+  const newOffset = weekOffset + delta;
+  if (newOffset < -2 || newOffset > 2) return;
+  weekOffset = newOffset;
+  renderWeek();
+}
+
+function toggleSection(id) {
+  document.getElementById(id)?.classList.toggle('hidden');
+}
+
+// Init
+renderWeek();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLT Actions — Cadence</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1>SLT Actions</h1>
+        <div class="header-sub" id="actions-header-sub">Leadership Action Tracker &nbsp;·&nbsp; 6 open actions</div>
+      </div>
+      <div class="flex items-center gap-8">
+        <button class="btn btn-primary btn-sm" onclick="openModal('add-action-modal')">+ Add action</button>
+      </div>
+    </div>
+
+    <div class="page-body">
+
+      <!-- Filters -->
+      <div class="flex items-center gap-8 mb-16">
+        <div class="flex items-center gap-6">
+          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--mid)">Owner</span>
+          <select class="form-input form-select form-input-sm" id="filter-owner" onchange="applyFilters()" style="width:auto;min-width:120px">
+            <option value="">All owners</option>
+            <option>Andrew</option>
+            <option>Luke</option>
+            <option>Dave</option>
+            <option>Sarah</option>
+            <option>Paul</option>
+          </select>
+        </div>
+        <div class="flex items-center gap-6">
+          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--mid)">Status</span>
+          <select class="form-input form-select form-input-sm" id="filter-status" onchange="applyFilters()" style="width:auto;min-width:130px">
+            <option value="">All statuses</option>
+            <option value="todo">To do</option>
+            <option value="progress">In progress</option>
+            <option value="done">Done</option>
+          </select>
+        </div>
+        <div style="flex:1"></div>
+        <button class="btn btn-ghost btn-sm" id="btn-show-done" onclick="toggleShowDone()">Show completed</button>
+      </div>
+
+      <!-- Actions table -->
+      <div class="card" style="padding:0;overflow:hidden">
+        <table class="action-table" id="actions-table">
+          <thead>
+            <tr>
+              <th style="width:4%"></th>
+              <th style="width:38%">Action</th>
+              <th style="width:12%">Owner</th>
+              <th style="width:13%">Due</th>
+              <th style="width:20%">Source</th>
+              <th style="width:13%">Status</th>
+            </tr>
+          </thead>
+          <tbody id="actions-tbody">
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Add action modal -->
+<div class="modal-overlay" id="add-action-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div><h2>Add action</h2></div>
+      <button class="modal-close" onclick="closeModal('add-action-modal')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Action</label>
+        <input type="text" class="form-input" id="new-action-title" placeholder="What needs to be done?">
+      </div>
+      <div class="flex gap-12">
+        <div class="form-group flex-1">
+          <label class="form-label">Owner</label>
+          <select class="form-input form-select" id="new-action-owner">
+            <option>Andrew</option>
+            <option>Luke</option>
+            <option>Dave</option>
+            <option>Sarah</option>
+            <option>Paul</option>
+          </select>
+        </div>
+        <div class="form-group flex-1">
+          <label class="form-label">Due date</label>
+          <input type="text" class="form-input" id="new-action-due" placeholder="e.g. 20 Mar">
+        </div>
+      </div>
+      <div class="form-group mb-0">
+        <label class="form-label">Source (optional)</label>
+        <input type="text" class="form-input" id="new-action-source" placeholder="e.g. Mon WIP — 16 Mar, or leave blank">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('add-action-modal')">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="addAction()">Add action</button>
+    </div>
+  </div>
+</div>
+
+<script src="nav.js"></script>
+<script>
+
+// ── DATA ──────────────────────────────────────────────────────
+let ACTIONS = [
+  { id: 1, title: 'Follow up with Series A lead investor',      owner: 'Andrew', due: '18 Mar', source: 'Mon WIP — 16 Mar',     status: 'todo' },
+  { id: 2, title: 'Finalise Q1 board pack financials',          owner: 'Andrew', due: '19 Mar', source: 'Mon WIP — 16 Mar',     status: 'progress' },
+  { id: 3, title: 'Review infrastructure security audit',       owner: 'Dave',   due: '21 Mar', source: 'Meeting — 9 Mar',      status: 'todo' },
+  { id: 4, title: 'Send enterprise pricing proposal to Atlassian', owner: 'Luke', due: '20 Mar', source: 'Mon WIP — 9 Mar',   status: 'progress' },
+  { id: 5, title: 'Update OKR tracker with Q1 actuals',         owner: 'Sarah',  due: '19 Mar', source: 'Thu Update — 13 Mar',  status: 'todo' },
+  { id: 6, title: 'Prepare Q2 planning kickoff deck',           owner: 'Paul',   due: '27 Mar', source: 'Goals review',         status: 'todo' },
+  { id: 7, title: 'Complete sprint planning documentation',     owner: 'Dave',   due: '14 Mar', source: 'Mon WIP — 9 Mar',      status: 'done' },
+  { id: 8, title: 'Send investor update email',                 owner: 'Andrew', due: '13 Mar', source: 'Mon WIP — 9 Mar',      status: 'done' },
+];
+let nextId = 9;
+let showDone = false;
+
+// ── RENDER ────────────────────────────────────────────────────
+function renderActions() {
+  const ownerFilter  = document.getElementById('filter-owner').value;
+  const statusFilter = document.getElementById('filter-status').value;
+
+  const rows = ACTIONS.filter(a => {
+    if (!showDone && a.status === 'done') return false;
+    if (ownerFilter  && a.owner !== ownerFilter)   return false;
+    if (statusFilter && a.status !== statusFilter) return false;
+    return true;
+  });
+
+  const tbody = document.getElementById('actions-tbody');
+  if (rows.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" style="padding:28px;text-align:center;color:var(--mid);font-size:13px">No actions match your filters.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = rows.map(a => {
+    const isDone  = a.status === 'done';
+    const isOverdue = !isDone && isOverdueDate(a.due);
+    const statusLabel = a.status === 'progress' ? 'In progress' : isDone ? 'Done' : 'To do';
+    const statusClass = a.status === 'progress' ? 'at-inprogress' : isDone ? 'at-done' : 'at-todo';
+    return `<tr class="${isDone ? 'at-row-done' : ''}" id="arow-${a.id}">
+      <td style="text-align:center">
+        <button class="action-check-btn${isDone ? ' checked' : ''}" onclick="completeAction(${a.id})" title="${isDone ? 'Mark as open' : 'Mark as done'}">
+          ${isDone ? '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>' : ''}
+        </button>
+      </td>
+      <td><span class="at-action${isDone ? ' at-done-text' : ''}">${a.title}</span></td>
+      <td><div class="flex items-center gap-6"><div class="avatar avatar-sm avatar-${a.owner.toLowerCase()}">${a.owner[0]}</div><span style="font-size:13px">${a.owner}</span></div></td>
+      <td><span class="at-due${isOverdue ? ' overdue' : ''}">${a.due}</span></td>
+      <td><span class="at-source">${a.source || '—'}</span></td>
+      <td><span class="at-status ${statusClass}">${statusLabel}</span></td>
+    </tr>`;
+  }).join('');
+
+  const openCount = ACTIONS.filter(a => a.status !== 'done').length;
+  document.getElementById('actions-header-sub').textContent = `Leadership Action Tracker · ${openCount} open action${openCount === 1 ? '' : 's'}`;
+}
+
+function isOverdueDate(due) {
+  if (!due) return false;
+  const months = { Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11 };
+  const parts = due.trim().split(' ');
+  if (parts.length < 2) return false;
+  const d = parseInt(parts[0]);
+  const m = months[parts[1]];
+  if (isNaN(d) || m === undefined) return false;
+  const today = new Date(2026, 2, 16); // hardcoded demo date
+  const dueDate = new Date(2026, m, d);
+  return dueDate < today;
+}
+
+function completeAction(id) {
+  const a = ACTIONS.find(x => x.id === id);
+  if (!a) return;
+  a.status = a.status === 'done' ? 'todo' : 'done';
+  renderActions();
+}
+
+function applyFilters() { renderActions(); }
+
+function toggleShowDone() {
+  showDone = !showDone;
+  const btn = document.getElementById('btn-show-done');
+  btn.textContent = showDone ? 'Hide completed' : 'Show completed';
+  renderActions();
+}
+
+function addAction() {
+  const title  = document.getElementById('new-action-title').value.trim();
+  const owner  = document.getElementById('new-action-owner').value;
+  const due    = document.getElementById('new-action-due').value.trim();
+  const source = document.getElementById('new-action-source').value.trim();
+  if (!title) return;
+  ACTIONS.unshift({ id: nextId++, title, owner, due: due || '—', source, status: 'todo' });
+  closeModal('add-action-modal');
+  document.getElementById('new-action-title').value = '';
+  document.getElementById('new-action-due').value = '';
+  document.getElementById('new-action-source').value = '';
+  renderActions();
+}
+
+// Init
+renderActions();
+
+</script>
+</body>
+</html>

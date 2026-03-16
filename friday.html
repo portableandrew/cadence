@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Friday Review — Cadence</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1>Friday Review</h1>
+        <div class="header-sub">Week of 16 – 20 March 2026 &nbsp;·&nbsp; End-of-week wrap-up</div>
+      </div>
+      <div class="flex items-center gap-8">
+        <a href="checkin.html" class="btn btn-ghost btn-sm">Friday Update →</a>
+      </div>
+    </div>
+
+    <div class="page-body">
+
+      <!-- COMPLETION SUMMARY -->
+      <div class="section-heading mb-12">Week completion summary</div>
+      <div class="completion-grid mb-24">
+        <div class="completion-card">
+          <div class="avatar avatar-andrew">A</div>
+          <div class="completion-info">
+            <div class="c-name">Andrew</div>
+            <div class="completion-fraction">3<span style="font-size:14px;font-weight:400;color:var(--mid)"> / 5</span></div>
+            <div class="c-pct">60% complete</div>
+          </div>
+          <div style="flex:1;min-width:60px">
+            <div class="progress-track"><div class="progress-fill" style="width:60%"></div></div>
+          </div>
+        </div>
+        <div class="completion-card">
+          <div class="avatar avatar-luke">L</div>
+          <div class="completion-info">
+            <div class="c-name">Luke</div>
+            <div class="completion-fraction">3<span style="font-size:14px;font-weight:400;color:var(--mid)"> / 4</span></div>
+            <div class="c-pct">75% complete</div>
+          </div>
+          <div style="flex:1;min-width:60px">
+            <div class="progress-track"><div class="progress-fill green" style="width:75%"></div></div>
+          </div>
+        </div>
+        <div class="completion-card">
+          <div class="avatar avatar-dave">D</div>
+          <div class="completion-info">
+            <div class="c-name">Dave</div>
+            <div class="completion-fraction">4<span style="font-size:14px;font-weight:400;color:var(--mid)"> / 8</span></div>
+            <div class="c-pct">50% complete</div>
+          </div>
+          <div style="flex:1;min-width:60px">
+            <div class="progress-track"><div class="progress-fill" style="width:50%"></div></div>
+          </div>
+        </div>
+        <div class="completion-card">
+          <div class="avatar avatar-sarah">S</div>
+          <div class="completion-info">
+            <div class="c-name">Sarah</div>
+            <div class="completion-fraction">3<span style="font-size:14px;font-weight:400;color:var(--mid)"> / 4</span></div>
+            <div class="c-pct">75% complete</div>
+          </div>
+          <div style="flex:1;min-width:60px">
+            <div class="progress-track"><div class="progress-fill green" style="width:75%"></div></div>
+          </div>
+        </div>
+        <div class="completion-card">
+          <div class="avatar avatar-paul">P</div>
+          <div class="completion-info">
+            <div class="c-name">Paul</div>
+            <div class="completion-fraction">1<span style="font-size:14px;font-weight:400;color:var(--mid)"> / 4</span></div>
+            <div class="c-pct">25% complete</div>
+          </div>
+          <div style="flex:1;min-width:60px">
+            <div class="progress-track"><div class="progress-fill" style="width:25%;background:#f87171"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INCOMPLETE TASKS -->
+      <div class="section-heading mb-12">Incomplete tasks — move to next week?</div>
+
+      <!-- Andrew -->
+      <div class="person-section" style="margin-bottom:16px">
+        <div class="person-header">
+          <div class="person-identity">
+            <div class="avatar avatar-andrew">A</div>
+            <div>
+              <div class="person-name">Andrew</div>
+              <div class="person-count">2 incomplete tasks</div>
+            </div>
+          </div>
+        </div>
+        <div style="padding:12px 16px">
+          <div class="incomplete-task" id="itask-a1">
+            <div class="t-name">Q1 board pack financials</div>
+            <div class="flex gap-6">
+              <span class="tag tag-default">Operational</span>
+              <button class="btn btn-xs btn-secondary" onclick="moveToNextWeek(this,'itask-a1')">Move to next week</button>
+              <button class="btn btn-xs btn-ghost" style="color:#991B1B;border-color:#FCA5A5" onclick="markDeferred(this,'itask-a1')">Defer</button>
+            </div>
+          </div>
+          <div class="incomplete-task" style="margin-top:6px" id="itask-a2">
+            <div class="t-name">Investor email responses</div>
+            <div class="flex gap-6">
+              <span class="tag tag-default">Operational</span>
+              <button class="btn btn-xs btn-secondary" onclick="moveToNextWeek(this,'itask-a2')">Move to next week</button>
+              <button class="btn btn-xs btn-ghost" style="color:#991B1B;border-color:#FCA5A5" onclick="markDeferred(this,'itask-a2')">Defer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dave -->
+      <div class="person-section">
+        <div class="person-header">
+          <div class="person-identity">
+            <div class="avatar avatar-dave">D</div>
+            <div>
+              <div class="person-name">Dave</div>
+              <div class="person-count">4 incomplete tasks</div>
+            </div>
+          </div>
+          <button class="btn btn-sm btn-secondary" onclick="moveAllToNextWeek(this)">Move all to next week</button>
+        </div>
+        <div style="padding:12px 16px">
+          <div class="incomplete-task" id="itask-d1">
+            <div class="t-name">Infrastructure documentation update</div>
+            <div class="flex gap-6">
+              <button class="btn btn-xs btn-secondary" onclick="moveToNextWeek(this,'itask-d1')">Move to next week</button>
+            </div>
+          </div>
+          <div class="incomplete-task" style="margin-top:6px" id="itask-d2">
+            <div class="t-name">Sprint planning prep</div>
+            <div class="flex gap-6">
+              <button class="btn btn-xs btn-secondary" onclick="moveToNextWeek(this,'itask-d2')">Move to next week</button>
+            </div>
+          </div>
+          <div class="incomplete-task" style="margin-top:6px" id="itask-d3">
+            <div class="t-name">Security audit report</div>
+            <div class="flex gap-6">
+              <button class="btn btn-xs btn-secondary" onclick="moveToNextWeek(this,'itask-d3')">Move to next week</button>
+            </div>
+          </div>
+          <div class="incomplete-task" style="margin-top:6px" id="itask-d4">
+            <div class="t-name">Team sync agenda</div>
+            <div class="flex gap-6">
+              <button class="btn btn-xs btn-secondary" onclick="moveToNextWeek(this,'itask-d4')">Move to next week</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Undo toast -->
+<div class="undo-toast" id="undo-toast">
+  <span id="undo-msg">Task moved to next week</span>
+  <button class="undo-btn" onclick="undoLastAction()">Undo</button>
+</div>
+
+<script src="nav.js"></script>
+<script>
+
+let currentUndoFn  = null;
+let undoToastTimer = null;
+
+// ── UNDO INFRASTRUCTURE ───────────────────────────────────────
+function showUndoToast(msg, undoFn) {
+  clearTimeout(undoToastTimer);
+  document.getElementById('undo-msg').textContent = msg;
+  const toast = document.getElementById('undo-toast');
+  toast.classList.add('visible');
+  currentUndoFn  = undoFn;
+  undoToastTimer = setTimeout(() => {
+    toast.classList.remove('visible');
+    currentUndoFn = null;
+  }, 4000);
+}
+
+function undoLastAction() {
+  if (currentUndoFn) {
+    currentUndoFn();
+    currentUndoFn = null;
+  }
+  clearTimeout(undoToastTimer);
+  document.getElementById('undo-toast').classList.remove('visible');
+}
+
+// ── ROW ACTIONS ───────────────────────────────────────────────
+function applyMoved(row) {
+  row.style.opacity         = '0.45';
+  row.style.pointerEvents   = 'none';
+  const nameEl = row.querySelector('.t-name');
+  nameEl.style.textDecoration = 'line-through';
+  if (!nameEl.nextElementSibling?.classList?.contains('moved-tag')) {
+    nameEl.insertAdjacentHTML('afterend', '<span class="tag tag-purple moved-tag" style="margin-left:6px;font-size:9px">→ Next week</span>');
+  }
+}
+
+function restoreRow(row) {
+  row.style.opacity         = '';
+  row.style.pointerEvents   = '';
+  const nameEl = row.querySelector('.t-name');
+  nameEl.style.textDecoration = '';
+  row.querySelector('.moved-tag')?.remove();
+  row.querySelector('.deferred-tag')?.remove();
+}
+
+function moveToNextWeek(btn, rowId) {
+  const row  = document.getElementById(rowId);
+  const name = row.querySelector('.t-name').textContent;
+  applyMoved(row);
+  showUndoToast(`"${name.slice(0,40)}" moved to next week`, () => restoreRow(row));
+}
+
+function markDeferred(btn, rowId) {
+  const row  = document.getElementById(rowId);
+  const name = row.querySelector('.t-name').textContent;
+  row.style.opacity       = '0.45';
+  row.style.pointerEvents = 'none';
+  const nameEl = row.querySelector('.t-name');
+  nameEl.style.textDecoration = 'line-through';
+  if (!nameEl.nextElementSibling?.classList?.contains('deferred-tag')) {
+    nameEl.insertAdjacentHTML('afterend', '<span class="tag tag-default deferred-tag" style="margin-left:6px;font-size:9px">Deferred</span>');
+  }
+  showUndoToast(`"${name.slice(0,40)}" deferred`, () => restoreRow(row));
+}
+
+function moveAllToNextWeek(btn) {
+  const section = btn.closest('.person-section');
+  const rows    = [...section.querySelectorAll('.incomplete-task')];
+  const prevStates = rows.map(r => ({
+    row: r,
+    opacity: r.style.opacity,
+    pointer: r.style.pointerEvents,
+    nameDeco: r.querySelector('.t-name').style.textDecoration,
+  }));
+  rows.forEach(row => {
+    if (row.style.opacity !== '0.45') applyMoved(row);
+  });
+  btn.textContent = '✓ All moved';
+  btn.disabled    = true;
+  showUndoToast(`All Dave's tasks moved to next week`, () => {
+    prevStates.forEach(({ row, opacity, pointer, nameDeco }) => {
+      row.style.opacity       = opacity;
+      row.style.pointerEvents = pointer;
+      row.querySelector('.t-name').style.textDecoration = nameDeco;
+      row.querySelector('.moved-tag')?.remove();
+    });
+    btn.textContent = 'Move all to next week';
+    btn.disabled    = false;
+  });
+}
+
+</script>
+</body>
+</html>

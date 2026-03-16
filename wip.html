@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>This Week — Cadence</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+  <main class="main-content">
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <div>
+        <h1>This Week</h1>
+        <div class="header-sub" id="wip-header-sub">Week of 16 – 20 March 2026 &nbsp;·&nbsp; 5 people &nbsp;·&nbsp; 25 tasks</div>
+      </div>
+      <div class="flex items-center gap-8">
+        <div class="week-nav">
+          <button class="week-nav-btn" id="wip-btn-prev" onclick="wipPrevWeek()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <span class="week-nav-label" id="wip-week-label">This week</span>
+          <button class="week-nav-btn" id="wip-btn-next" onclick="wipNextWeek()" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+        <div class="view-toggle">
+          <button class="vt-btn active" id="wip-view-mine" onclick="setWipView('mine')">My tasks</button>
+          <button class="vt-btn" id="wip-view-all" onclick="setWipView('all')">Everyone</button>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="openModal('add-task-modal')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add task
+        </button>
+      </div>
+    </div>
+
+    <!-- PAGE BODY -->
+    <div class="page-body">
+
+      <!-- ═══════════════════════════════════════
+           MY TASKS VIEW
+           ═══════════════════════════════════════ -->
+      <div id="view-mine" class="wip-view">
+
+        <!-- Prompt text -->
+        <div class="wip-prompt">
+          Have a think about your goals and your week ahead. Build your action list for this week.
+        </div>
+
+        <!-- ANDREW's tasks (My Tasks = just this user) -->
+        <div class="person-section" data-person="andrew">
+          <div class="person-header">
+            <div class="person-identity">
+              <div class="avatar avatar-andrew">A</div>
+              <div>
+                <div class="person-name">Andrew</div>
+                <div class="person-count" id="my-task-count">5 tasks &nbsp;·&nbsp; 1 done</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-8">
+              <span class="tag tag-default">Admin</span>
+            </div>
+          </div>
+
+          <div class="task-list" id="my-tasks-list">
+            <div class="task-card" data-task-id="a1">
+              <button class="status-btn progress" onclick="cycleStatus(this)" title="In progress"></button>
+              <div class="task-body">
+                <div class="task-title">Prepare board deck</div>
+                <div class="task-meta">
+                  <span class="goal-link">Scale revenue to $10M ARR</span>
+                  <span class="tag tag-default">Strategic</span>
+                  <span class="status-badge status-progress"><span class="status-dot progress"></span> In progress</span>
+                </div>
+                <div class="task-thread" id="thread-a1"></div>
+              </div>
+              <div class="task-actions">
+                <button class="task-thread-btn" onclick="toggleThread('a1')" title="Comments">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                  <span class="thread-count" id="tc-a1"></span>
+                </button>
+                <div class="task-menu-wrap">
+                  <button class="task-menu-btn" onclick="toggleTaskMenu(this)">⋮</button>
+                  <div class="task-menu">
+                    <button onclick="moveTask('a1', 'up')">▲ Move up</button>
+                    <button onclick="moveTask('a1', 'down')">▼ Move down</button>
+                    <div class="task-menu-divider"></div>
+                    <button onclick="moveTaskWeek('a1')">Move to next week</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-card" data-task-id="a2">
+              <button class="status-btn todo" onclick="cycleStatus(this)" title="To do"></button>
+              <div class="task-body">
+                <div class="task-title">Q1 board pack financials</div>
+                <div class="task-meta">
+                  <span class="tag tag-default">Operational</span>
+                  <span class="status-badge status-todo"><span class="status-dot todo"></span> To do</span>
+                </div>
+                <div class="task-thread" id="thread-a2"></div>
+              </div>
+              <div class="task-actions">
+                <button class="task-thread-btn" onclick="toggleThread('a2')" title="Comments">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                  <span class="thread-count" id="tc-a2"></span>
+                </button>
+                <div class="task-menu-wrap">
+                  <button class="task-menu-btn" onclick="toggleTaskMenu(this)">⋮</button>
+                  <div class="task-menu">
+                    <button onclick="moveTask('a2', 'up')">▲ Move up</button>
+                    <button onclick="moveTask('a2', 'down')">▼ Move down</button>
+                    <div class="task-menu-divider"></div>
+                    <button onclick="moveTaskWeek('a2')">Move to next week</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-card done-card" data-task-id="a3">
+              <button class="status-btn done" onclick="cycleStatus(this)" title="Done"></button>
+              <div class="task-body">
+                <div class="task-title">1:1 catch-up: Luke</div>
+                <div class="task-meta">
+                  <span class="tag tag-default">Operational</span>
+                  <span class="status-badge status-done"><span class="status-dot done"></span> Done</span>
+                </div>
+                <div class="task-thread" id="thread-a3"></div>
+              </div>
+              <div class="task-actions">
+                <button class="task-thread-btn" onclick="toggleThread('a3')" title="Comments">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                  <span class="thread-count" id="tc-a3"></span>
+                </button>
+                <div class="task-menu-wrap">
+                  <button class="task-menu-btn" onclick="toggleTaskMenu(this)">⋮</button>
+                  <div class="task-menu">
+                    <button onclick="moveTask('a3', 'up')">▲ Move up</button>
+                    <button onclick="moveTask('a3', 'down')">▼ Move down</button>
+                    <div class="task-menu-divider"></div>
+                    <button onclick="moveTaskWeek('a3')">Move to next week</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-card" data-task-id="a4">
+              <button class="status-btn todo" onclick="cycleStatus(this)" title="To do"></button>
+              <div class="task-body">
+                <div class="task-title">Investor email responses</div>
+                <div class="task-meta">
+                  <span class="tag tag-default">Operational</span>
+                  <span class="status-badge status-todo"><span class="status-dot todo"></span> To do</span>
+                </div>
+                <div class="task-thread" id="thread-a4"></div>
+              </div>
+              <div class="task-actions">
+                <button class="task-thread-btn" onclick="toggleThread('a4')" title="Comments">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                  <span class="thread-count" id="tc-a4"></span>
+                </button>
+                <div class="task-menu-wrap">
+                  <button class="task-menu-btn" onclick="toggleTaskMenu(this)">⋮</button>
+                  <div class="task-menu">
+                    <button onclick="moveTask('a4', 'up')">▲ Move up</button>
+                    <button onclick="moveTask('a4', 'down')">▼ Move down</button>
+                    <div class="task-menu-divider"></div>
+                    <button onclick="moveTaskWeek('a4')">Move to next week</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-card" data-task-id="a5">
+              <button class="status-btn todo" onclick="cycleStatus(this)" title="To do"></button>
+              <div class="task-body">
+                <div class="task-title">OKR tracker update</div>
+                <div class="task-meta">
+                  <span class="goal-link">Implement quarterly OKR process</span>
+                  <span class="tag tag-default">Operational</span>
+                  <span class="status-badge status-todo"><span class="status-dot todo"></span> To do</span>
+                </div>
+                <div class="task-thread" id="thread-a5"></div>
+              </div>
+              <div class="task-actions">
+                <button class="task-thread-btn" onclick="toggleThread('a5')" title="Comments">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                  <span class="thread-count" id="tc-a5"></span>
+                </button>
+                <div class="task-menu-wrap">
+                  <button class="task-menu-btn" onclick="toggleTaskMenu(this)">⋮</button>
+                  <div class="task-menu">
+                    <button onclick="moveTask('a5', 'up')">▲ Move up</button>
+                    <button onclick="moveTask('a5', 'down')">▼ Move down</button>
+                    <div class="task-menu-divider"></div>
+                    <button onclick="moveTaskWeek('a5')">Move to next week</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button class="add-task-btn" onclick="toggleAddTask(this)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add task
+          </button>
+          <div class="add-task-form">
+            <input type="text" class="form-input form-input-sm" placeholder="Task title…">
+            <div class="flex gap-6">
+              <button class="btn btn-primary btn-xs">Add task</button>
+              <button class="btn btn-ghost btn-xs" onclick="cancelAddTask(this)">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- LAST WEEK CARRY-OVER -->
+        <div class="carry-over-section" id="carry-over-section">
+          <div class="carry-over-header">
+            <div class="section-heading" style="margin:0">Not completed last week</div>
+            <span class="text-xs text-mid">Move any of these to this week</span>
+          </div>
+          <div id="carry-over-list">
+            <div class="carry-over-item" data-co-id="co1">
+              <div class="carry-over-item-body">
+                <button class="status-btn todo" style="pointer-events:none; opacity:0.5; flex-shrink:0"></button>
+                <div>
+                  <div class="carry-over-title">Series A prep deck draft</div>
+                  <div class="carry-over-meta">
+                    <span class="tag tag-default">Strategic</span>
+                    <span class="text-xs text-mid">Was due 13 Mar — moved from week of 9 Mar</span>
+                  </div>
+                </div>
+              </div>
+              <button class="btn btn-ghost btn-sm" onclick="moveCarryOver('co1', 'Series A prep deck draft', 'Strategic')">Move to this week →</button>
+            </div>
+            <div class="carry-over-item" data-co-id="co2">
+              <div class="carry-over-item-body">
+                <button class="status-btn todo" style="pointer-events:none; opacity:0.5; flex-shrink:0"></button>
+                <div>
+                  <div class="carry-over-title">Hiring plan review with Luke</div>
+                  <div class="carry-over-meta">
+                    <span class="tag tag-default">Operational</span>
+                    <span class="text-xs text-mid">Was due 13 Mar — moved from week of 9 Mar</span>
+                  </div>
+                </div>
+              </div>
+              <button class="btn btn-ghost btn-sm" onclick="moveCarryOver('co2', 'Hiring plan review with Luke', 'Operational')">Move to this week →</button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end view-mine -->
+
+      <!-- ═══════════════════════════════════════
+           EVERYONE VIEW
+           ═══════════════════════════════════════ -->
+      <div id="view-all" class="wip-view hidden">
+
+        <!-- ANDREW -->
+        <div class="person-section" data-person="andrew">
+          <div class="person-header">
+            <div class="person-identity">
+              <div class="avatar avatar-andrew">A</div>
+              <div>
+                <div class="person-name">Andrew</div>
+                <div class="person-count">5 tasks &nbsp;·&nbsp; 1 done</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-8">
+              <span class="tag tag-default">Admin</span>
+              <button class="review-toggle" data-name="Andrew" onclick="toggleReview(this)">
+                <span class="toggle-pip"></span> Review with Andrew
+              </button>
+            </div>
+          </div>
+          <div class="task-list">
+            <div class="task-card" data-task-id="ea1">
+              <button class="status-btn progress" onclick="cycleStatus(this)"></button>
+              <div class="task-body">
+                <div class="task-title">Prepare board deck</div>
+                <div class="task-meta">
+                  <span class="goal-link">Scale revenue to $10M ARR</span>
+                  <span class="tag tag-default">Strategic</span>
+                  <span class="status-badge status-progress"><span class="status-dot progress"></span> In progress</span>
+                </div>
+              </div>
+              <div class="task-actions">
+                <button class="task-thread-btn" onclick="toggleThread('ea1')">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                  <span class="thread-count" id="tc-ea1"></span>
+                </button>
+                <div class="task-menu-wrap">
+                  <button class="task-menu-btn" onclick="toggleTaskMenu(this)">⋮</button>
+                  <div class="task-menu">
+                    <button onclick="moveTaskWeek('ea1')">Move to next week</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="task-card" data-task-id="ea2">
+              <button class="status-btn todo" onclick="cycleStatus(this)"></button>
+              <div class="task-body">
+                <div class="task-title">Q1 board pack financials</div>
+                <div class="task-meta">
+                  <span class="tag tag-default">Operational</span>
+                  <span class="status-badge status-todo"><span class="status-dot todo"></span> To do</span>
+                </div>
+              </div>
+              <div class="task-actions">
+                <button class="task-thread-btn" onclick="toggleThread('ea2')">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                  <span class="thread-count" id="tc-ea2"></span>
+                </button>
+                <div class="task-menu-wrap">
+                  <button class="task-menu-btn" onclick="toggleTaskMenu(this)">⋮</button>
+                  <div class="task-menu">
+                    <button onclick="moveTaskWeek('ea2')">Move to next week</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="task-card done-card" data-task-id="ea3">
+              <button class="status-btn done" onclick="cycleStatus(this)"></button>
+              <div class="task-body">
+                <div class="task-title">1:1 catch-up: Luke</div>
+                <div class="task-meta">
+                  <span class="tag tag-default">Operational</span>
+                  <span class="status-badge status-done"><span class="status-dot done"></span> Done</span>
+                </div>
+              </div>
+              <div class="task-actions">
+                <button class="task-thread-btn" onclick="toggleThread('ea3')">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                  <span class="thread-count" id="tc-ea3"></span>
+                </button>
+                <div class="task-menu-wrap">
+                  <button class="task-menu-btn" onclick="toggleTaskMenu(this)">⋮</button>
+                  <div class="task-menu">
+                    <button onclick="moveTaskWeek('ea3')">Move to next week</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="task-card" data-task-id="ea4">
+              <button class="status-btn todo" onclick="cycleStatus(this)"></button>
+              <div class="task-body">
+                <div class="task-title">Investor email responses</div>
+                <div class="task-meta">
+                  <span class="tag tag-default">Operational</span>
+                  <span class="status-badge status-todo"><span class="status-dot todo"></span> To do</span>
+                </div>
+              </div>
+              <div class="task-actions">
+                <button class="task-thread-btn" onclick="toggleThread('ea4')">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                  <span class="thread-count" id="tc-ea4"></span>
+                </button>
+                <div class="task-menu-wrap">
+                  <button class="task-menu-btn" onclick="toggleTaskMenu(this)">⋮</button>
+                  <div class="task-menu">
+                    <button onclick="moveTaskWeek('ea4')">Move to next week</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="task-card" data-task-id="ea5">
+              <button class="status-btn todo" onclick="cycleStatus(this)"></button>
+              <div class="task-body">
+                <div class="task-title">OKR tracker update</div>
+                <div class="task-meta">
+                  <span class="goal-link">Implement quarterly OKR process</span>
+                  <span class="tag tag-default">Operational</span>
+                  <span class="status-badge status-todo"><span class="status-dot todo"></span> To do</span>
+                </div>
+              </div>
+              <div class="task-actions">
+                <button class="task-thread-btn" onclick="toggleThread('ea5')">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                  <span class="thread-count" id="tc-ea5"></span>
+                </button>
+                <div class="task-menu-wrap">
+                  <button class="task-menu-btn" onclick="toggleTaskMenu(this)">⋮</button>
+                  <div class="task-menu">
+                    <button onclick="moveTaskWeek('ea5')">Move to next week</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="add-task-btn" onclick="toggleAddTask(this)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add task
+          </button>
+          <div class="add-task-form">
+            <input type="text" class="form-input form-input-sm" placeholder="Task title…">
+            <div class="flex gap-6">
+              <button class="btn btn-primary btn-xs">Add task</button>
+              <button class="btn btn-ghost btn-xs" onclick="cancelAddTask(this)">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- LUKE -->
+        <div class="person-section" data-person="luke">
+          <div class="person-header">
+            <div class="person-identity">
+              <div class="avatar avatar-luke">L</div>
+              <div>
+                <div class="person-name">Luke</div>
+                <div class="person-count">4 tasks &nbsp;·&nbsp; 1 done</div>
+              </div>
+            </div>
+            <button class="review-toggle" data-name="Luke" onclick="toggleReview(this)">
+              <span class="toggle-pip"></span> Review with Luke
+            </button>
+          </div>
+          <div class="task-list">
+            <div class="task-card" data-task-id="el1">
+              <button class="status-btn progress" onclick="cycleStatus(this)"></button>
+              <div class="task-body">
+                <div class="task-title">Acme Corp pitch presentation</div>
+                <div class="task-meta">
+                  <span class="goal-link">Win 3 new enterprise accounts</span>
+                  <span class="tag tag-default">Strategic</span>
+                  <span class="status-badge status-progress"><span class="status-dot progress"></span> In progress</span>
+                </div>
+              </div>
+              <div class="task-actions">
+                <button class="task-thread-btn" onclick="toggleThread('el1')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span class="thread-count" id="tc-el1"></span></button>
+                <div class="task-menu-wrap"><button class="task-menu-btn" onclick="toggleTaskMenu(this)">⋮</button><div class="task-menu"><button onclick="moveTaskWeek('el1')">Move to next week</button></div></div>
+              </div>
+            </div>
+            <div class="task-card" data-task-id="el2">
+              <button class="status-btn todo" onclick="cycleStatus(this)"></button>
+              <div class="task-body">
+                <div class="task-title">SDR job description review</div>
+                <div class="task-meta">
+                  <span class="goal-link">Hire 2 SDRs</span>
+                  <span class="tag tag-default">Operational</span>
+                  <span class="status-badge status-todo"><span class="status-dot todo"></span> To do</span>
+                </div>
+              </div>
+              <div class="task-actions">
+                <button class="task-thread-btn" onclick="toggleThread('el2')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span class="thread-count" id="tc-el2"></span></button>
+                <div class="task-menu-wrap"><button class="task-menu-btn" onclick="toggleTaskMenu(this)">⋮</button><div class="task-menu"><button onclick="moveTaskWeek('el2')">Move to next week</button></div></div>
+              </div>
+            </div>
+            <div class="task-card done-card" data-task-id="el3">
+              <button class="status-btn done" onclick="cycleStatus(this)"></button>
+              <div class="task-body">
+                <div class="task-title">Q1 sales forecast update</div>
+                <div class="task-meta">
+                  <span class="tag tag-default">Operational</span>
+                  <span class="status-badge status-done"><span class="status-dot done"></span> Done</span>
+                </div>
+              </div>
+              <div class="task-actions">
+                <button class="task-thread-btn" onclick="toggleThread('el3')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span class="thread-count" id="tc-el3"></span></button>
+                <div class="task-menu-wrap"><button class="task-menu-btn" onclick="toggleTaskMenu(this)">⋮</button><div class="task-menu"><button onclick="moveTaskWeek('el3')">Move to next week</button></div></div>
+              </div>
+            </div>
+            <div class="task-card" data-task-id="el4">
+              <button class="status-btn todo" onclick="cycleStatus(this)"></button>
+              <div class="task-body">
+                <div class="task-title">Existing client check-in call</div>
+                <div class="task-meta">
+                  <span class="tag tag-default">Operational</span>
+                  <span class="status-badge status-todo"><span class="status-dot todo"></span> To do</span>
+                </div>
+              </div>
+              <div class="task-actions">
+                <button class="task-thread-btn" onclick="toggleThread('el4')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span class="thread-count" id="tc-el4"></span></button>
+                <div class="task-menu-wrap"><button class="task-menu-btn" onclick="toggleTaskMenu(this)">⋮</button><div class="task-menu"><button onclick="moveTaskWeek('el4')">Move to next week</button></div></div>
+              </div>
+            </div>
+          </div>
+          <button class="add-task-btn" onclick="toggleAddTask(this)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add task
+          </button>
+          <div class="add-task-form">
+            <input type="text" class="form-input form-input-sm" placeholder="Task title…">
+            <div class="flex gap-6">
+              <button class="btn btn-primary btn-xs">Add task</button>
+              <button class="btn btn-ghost btn-xs" onclick="cancelAddTask(this)">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- DAVE -->
+        <div class="person-section" data-person="dave">
+          <div class="person-header">
+            <div class="person-identity">
+              <div class="avatar avatar-dave">D</div>
+              <div>
+                <div class="person-name">Dave</div>
+                <div class="person-count flex items-center gap-6">
+                  8 tasks &nbsp;·&nbsp; 1 done
+                  <span class="tag tag-amber" style="font-size:9px;padding:1px 6px">⚡ Overloaded</span>
+                </div>
+              </div>
+            </div>
+            <button class="review-toggle" data-name="Dave" onclick="toggleReview(this)">
+              <span class="toggle-pip"></span> Review with Dave
+            </button>
+          </div>
+          <div class="task-list">
+            <div class="task-card" data-task-id="ed1">
+              <button class="status-btn progress" onclick="cycleStatus(this)"></button>
+              <div class="task-body">
+                <div class="task-title">Ship Cadence HTML prototype</div>
+                <div class="task-meta">
+                  <span class="goal-link">Ship Cadence v1.0</span>
+                  <span class="tag tag-default">Strategic</span>
+                  <span class="status-badge status-progress"><span class="status-dot progress"></span> In progress</span>
+                </div>
+                <div class="task-thread" id="thread-ed1">
+                  <div class="thread-msg">
+                    <div class="avatar avatar-andrew" style="width:20px;height:20px;font-size:9px;flex-shrink:0">A</div>
+                    <div class="thread-msg-body">
+                      <span class="thread-author">Andrew</span>
+                      <span class="thread-time">Mon 9:12am</span>
+                      <div class="thread-text">Where are we on the checkin flow? Need it for the board demo.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="task-actions">
+                <button class="task-thread-btn active" onclick="toggleThread('ed1')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span class="thread-count" id="tc-ed1">1</span></button>
+                <div class="task-menu-wrap"><button class="task-menu-btn" onclick="toggleTaskMenu(this)">⋮</button><div class="task-menu"><button onclick="moveTaskWeek('ed1')">Move to next week</button></div></div>
+              </div>
+            </div>
+            <div class="task-card done-card" data-task-id="ed2">
+              <button class="status-btn done" onclick="cycleStatus(this)"></button>
+              <div class="task-body">
+                <div class="task-title">Production auth bug fix</div>
+                <div class="task-meta"><span class="tag tag-default">Operational</span><span class="status-badge status-done"><span class="status-dot done"></span> Done</span></div>
+              </div>
+              <div class="task-actions">
+                <button class="task-thread-btn" onclick="toggleThread('ed2')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span class="thread-count" id="tc-ed2"></span></button>
+                <div class="task-menu-wrap"><button class="task-menu-btn" onclick="toggleTaskMenu(this)">⋮</button><div class="task-menu"><button onclick="moveTaskWeek('ed2')">Move to next week</button></div></div>
+              </div>
+            </div>
+            <div class="task-card" data-task-id="ed3">
+              <button class="status-btn todo" onclick="cycleStatus(this)"></button>
+              <div class="task-body">
+                <div class="task-title">PR code reviews (3 open)</div>
+                <div class="task-meta"><span class="tag tag-default">Operational</span><span class="status-badge status-todo"><span class="status-dot todo"></span> To do</span></div>
+              </div>
+              <div class="task-actions">
+                <button class="task-thread-btn" onclick="toggleThread('ed3')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span class="thread-count" id="tc-ed3"></span></button>
+                <div class="task-menu-wrap"><button class="task-menu-btn" onclick="toggleTaskMenu(this)">⋮</button><div class="task-menu"><button onclick="moveTaskWeek('ed3')">Move to next week</button></div></div>
+              </div>
+            </div>
+            <div class="task-card" data-task-id="ed4">
+              <button class="status-btn todo" onclick="cycleStatus(this)"></button>
+              <div class="task-body">
+                <div class="task-title">Infrastructure documentation update</div>
+                <div class="task-meta"><span class="tag tag-default">Operational</span><span class="status-badge status-todo"><span class="status-dot todo"></span> To do</span></div>
+              </div>
+              <div class="task-actions">
+                <button class="task-thread-btn" onclick="toggleThread('ed4')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span class="thread-count" id="tc-ed4"></span></button>
+                <div class="task-menu-wrap"><button class="task-menu-btn" onclick="toggleTaskMenu(this)">⋮</button><div class="task-menu"><button onclick="moveTaskWeek('ed4')">Move to next week</button></div></div>
+              </div>
+            </div>
+            <div class="task-card" data-task-id="ed5">
+              <button class="status-btn todo" onclick="cycleStatus(this)"></button>
+              <div class="task-body">
+                <div class="task-title">Sprint planning prep</div>
+                <div class="task-meta"><span class="tag tag-default">Operational</span><span class="status-badge status-todo"><span class="status-dot todo"></span> To do</span></div>
+              </div>
+              <div class="task-actions">
+                <button class="task-thread-btn" onclick="toggleThread('ed5')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span class="thread-count" id="tc-ed5"></span></button>
+                <div class="task-menu-wrap"><button class="task-menu-btn" onclick="toggleTaskMenu(this)">⋮</button><div class="task-menu"><button onclick="moveTaskWeek('ed5')">Move to next week</button></div></div>
+              </div>
+            </div>
+          </div>
+          <button class="add-task-btn" onclick="toggleAddTask(this)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add task
+          </button>
+          <div class="add-task-form">
+            <input type="text" class="form-input form-input-sm" placeholder="Task title…">
+            <div class="flex gap-6">
+              <button class="btn btn-primary btn-xs">Add task</button>
+              <button class="btn btn-ghost btn-xs" onclick="cancelAddTask(this)">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SARAH -->
+        <div class="person-section" data-person="sarah">
+          <div class="person-header">
+            <div class="person-identity">
+              <div class="avatar avatar-sarah">S</div>
+              <div>
+                <div class="person-name">Sarah</div>
+                <div class="person-count">3 tasks &nbsp;·&nbsp; 2 done</div>
+              </div>
+            </div>
+            <button class="review-toggle" data-name="Sarah" onclick="toggleReview(this)">
+              <span class="toggle-pip"></span> Review with Sarah
+            </button>
+          </div>
+          <div class="task-list">
+            <div class="task-card done-card" data-task-id="es1">
+              <button class="status-btn done" onclick="cycleStatus(this)"></button>
+              <div class="task-body">
+                <div class="task-title">Brand audit report</div>
+                <div class="task-meta"><span class="tag tag-default">Strategic</span><span class="status-badge status-done"><span class="status-dot done"></span> Done</span></div>
+              </div>
+              <div class="task-actions">
+                <button class="task-thread-btn" onclick="toggleThread('es1')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span class="thread-count" id="tc-es1"></span></button>
+                <div class="task-menu-wrap"><button class="task-menu-btn" onclick="toggleTaskMenu(this)">⋮</button><div class="task-menu"><button onclick="moveTaskWeek('es1')">Move to next week</button></div></div>
+              </div>
+            </div>
+            <div class="task-card done-card" data-task-id="es2">
+              <button class="status-btn done" onclick="cycleStatus(this)"></button>
+              <div class="task-body">
+                <div class="task-title">Enterprise customer interview</div>
+                <div class="task-meta"><span class="tag tag-default">Operational</span><span class="status-badge status-done"><span class="status-dot done"></span> Done</span></div>
+              </div>
+              <div class="task-actions">
+                <button class="task-thread-btn" onclick="toggleThread('es2')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span class="thread-count" id="tc-es2"></span></button>
+                <div class="task-menu-wrap"><button class="task-menu-btn" onclick="toggleTaskMenu(this)">⋮</button><div class="task-menu"><button onclick="moveTaskWeek('es2')">Move to next week</button></div></div>
+              </div>
+            </div>
+            <div class="task-card" data-task-id="es3">
+              <button class="status-btn progress" onclick="cycleStatus(this)"></button>
+              <div class="task-body">
+                <div class="task-title">Design system tooling review</div>
+                <div class="task-meta"><span class="tag tag-default">Operational</span><span class="status-badge status-progress"><span class="status-dot progress"></span> In progress</span></div>
+              </div>
+              <div class="task-actions">
+                <button class="task-thread-btn" onclick="toggleThread('es3')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span class="thread-count" id="tc-es3"></span></button>
+                <div class="task-menu-wrap"><button class="task-menu-btn" onclick="toggleTaskMenu(this)">⋮</button><div class="task-menu"><button onclick="moveTaskWeek('es3')">Move to next week</button></div></div>
+              </div>
+            </div>
+          </div>
+          <button class="add-task-btn" onclick="toggleAddTask(this)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add task
+          </button>
+          <div class="add-task-form">
+            <input type="text" class="form-input form-input-sm" placeholder="Task title…">
+            <div class="flex gap-6">
+              <button class="btn btn-primary btn-xs">Add task</button>
+              <button class="btn btn-ghost btn-xs" onclick="cancelAddTask(this)">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAUL -->
+        <div class="person-section" data-person="paul">
+          <div class="person-header">
+            <div class="person-identity">
+              <div class="avatar avatar-paul">P</div>
+              <div>
+                <div class="person-name">Paul</div>
+                <div class="person-count">3 tasks &nbsp;·&nbsp; 0 done</div>
+              </div>
+            </div>
+            <button class="review-toggle" data-name="Paul" onclick="toggleReview(this)">
+              <span class="toggle-pip"></span> Review with Paul
+            </button>
+          </div>
+          <div class="task-list">
+            <div class="task-card" data-task-id="ep1">
+              <button class="status-btn progress" onclick="cycleStatus(this)"></button>
+              <div class="task-body">
+                <div class="task-title">Q2 planning kickoff deck</div>
+                <div class="task-meta"><span class="tag tag-default">Strategic</span><span class="status-badge status-progress"><span class="status-dot progress"></span> In progress</span></div>
+              </div>
+              <div class="task-actions">
+                <button class="task-thread-btn" onclick="toggleThread('ep1')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span class="thread-count" id="tc-ep1"></span></button>
+                <div class="task-menu-wrap"><button class="task-menu-btn" onclick="toggleTaskMenu(this)">⋮</button><div class="task-menu"><button onclick="moveTaskWeek('ep1')">Move to next week</button></div></div>
+              </div>
+            </div>
+            <div class="task-card" data-task-id="ep2">
+              <button class="status-btn todo" onclick="cycleStatus(this)"></button>
+              <div class="task-body">
+                <div class="task-title">Postgres migration script</div>
+                <div class="task-meta"><span class="goal-link">Migrate to new infrastructure</span><span class="tag tag-default">Strategic</span><span class="status-badge status-todo"><span class="status-dot todo"></span> To do</span></div>
+              </div>
+              <div class="task-actions">
+                <button class="task-thread-btn" onclick="toggleThread('ep2')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span class="thread-count" id="tc-ep2"></span></button>
+                <div class="task-menu-wrap"><button class="task-menu-btn" onclick="toggleTaskMenu(this)">⋮</button><div class="task-menu"><button onclick="moveTaskWeek('ep2')">Move to next week</button></div></div>
+              </div>
+            </div>
+            <div class="task-card" data-task-id="ep3">
+              <button class="status-btn todo" onclick="cycleStatus(this)"></button>
+              <div class="task-body">
+                <div class="task-title">TechCorp feature feasibility review</div>
+                <div class="task-meta"><span class="tag tag-default">Operational</span><span class="status-badge status-todo"><span class="status-dot todo"></span> To do</span></div>
+              </div>
+              <div class="task-actions">
+                <button class="task-thread-btn" onclick="toggleThread('ep3')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span class="thread-count" id="tc-ep3"></span></button>
+                <div class="task-menu-wrap"><button class="task-menu-btn" onclick="toggleTaskMenu(this)">⋮</button><div class="task-menu"><button onclick="moveTaskWeek('ep3')">Move to next week</button></div></div>
+              </div>
+            </div>
+          </div>
+          <button class="add-task-btn" onclick="toggleAddTask(this)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add task
+          </button>
+          <div class="add-task-form">
+            <input type="text" class="form-input form-input-sm" placeholder="Task title…">
+            <div class="flex gap-6">
+              <button class="btn btn-primary btn-xs">Add task</button>
+              <button class="btn btn-ghost btn-xs" onclick="cancelAddTask(this)">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end view-all -->
+    </div><!-- end page-body -->
+  </main>
+</div>
+
+<!-- ADD TASK MODAL -->
+<div class="modal-overlay" id="add-task-modal">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-header">
+      <div><h2>Add task</h2></div>
+      <button class="modal-close" onclick="closeModal('add-task-modal')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Task title</label>
+        <input type="text" class="form-input" id="new-task-title" placeholder="What needs to be done?">
+      </div>
+      <div class="flex gap-12">
+        <div class="form-group flex-1">
+          <label class="form-label">Assigned to</label>
+          <select class="form-input form-select" id="new-task-owner">
+            <option>Andrew</option><option>Luke</option><option>Dave</option><option>Sarah</option><option>Paul</option>
+          </select>
+        </div>
+        <div class="form-group flex-1">
+          <label class="form-label">Type</label>
+          <select class="form-input form-select" id="new-task-type">
+            <option>Operational</option><option>Strategic</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('add-task-modal')">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="closeModal('add-task-modal')">Add task</button>
+    </div>
+  </div>
+</div>
+
+<script src="nav.js"></script>
+<script>
+  // ── WEEK NAVIGATION ────────────────────────────────────────
+  const WIP_WEEKS = [
+    { label: '9 – 13 Mar', navLabel: '9 – 13 Mar', sub: 'Week of 9 – 13 March 2026 · 5 people · 22 tasks' },
+    { label: '16 – 20 Mar', navLabel: 'This week', sub: 'Week of 16 – 20 March 2026 · 5 people · 25 tasks' },
+  ];
+  let wipWeekIdx = 1;
+
+  function renderWipWeekNav() {
+    document.getElementById('wip-week-label').textContent = WIP_WEEKS[wipWeekIdx].navLabel;
+    document.getElementById('wip-header-sub').textContent = WIP_WEEKS[wipWeekIdx].sub;
+    document.getElementById('wip-btn-prev').disabled = wipWeekIdx === 0;
+    document.getElementById('wip-btn-next').disabled = wipWeekIdx === WIP_WEEKS.length - 1;
+  }
+
+  function wipPrevWeek() { if (wipWeekIdx > 0) { wipWeekIdx--; renderWipWeekNav(); } }
+  function wipNextWeek() { if (wipWeekIdx < WIP_WEEKS.length - 1) { wipWeekIdx++; renderWipWeekNav(); } }
+  renderWipWeekNav();
+
+  // ── VIEW TOGGLE ────────────────────────────────────────────
+  function setWipView(v) {
+    document.getElementById('wip-view-mine').classList.toggle('active', v === 'mine');
+    document.getElementById('wip-view-all').classList.toggle('active', v === 'all');
+    document.getElementById('view-mine').classList.toggle('hidden', v !== 'mine');
+    document.getElementById('view-all').classList.toggle('hidden', v !== 'all');
+  }
+
+  // ── TASK THREAD TOGGLE ─────────────────────────────────────
+  function toggleThread(id) {
+    const thread = document.getElementById('thread-' + id);
+    if (!thread) return;
+    const isOpen = thread.classList.toggle('open');
+    const btn = thread.closest('.task-card')?.querySelector('.task-thread-btn');
+    if (btn) btn.classList.toggle('active', isOpen);
+    if (isOpen) {
+      let compose = thread.querySelector('.thread-compose');
+      if (!compose) {
+        compose = document.createElement('div');
+        compose.className = 'thread-compose';
+        compose.innerHTML = `<div class="avatar avatar-andrew" style="width:20px;height:20px;font-size:9px">A</div>
+          <input type="text" class="thread-input form-input form-input-sm" placeholder="Add a comment…">
+          <button class="btn btn-primary btn-xs" onclick="sendThread('${id}', this)">Send</button>`;
+        thread.appendChild(compose);
+      }
+      compose.querySelector('input')?.focus();
+    }
+  }
+
+  function sendThread(id, btn) {
+    const compose = btn.closest('.thread-compose');
+    const input = compose.querySelector('input');
+    const text = input.value.trim();
+    if (!text) return;
+    const thread = document.getElementById('thread-' + id);
+    const msg = document.createElement('div');
+    msg.className = 'thread-msg';
+    msg.innerHTML = `<div class="avatar avatar-andrew" style="width:20px;height:20px;font-size:9px;flex-shrink:0">A</div>
+      <div class="thread-msg-body">
+        <span class="thread-author">Andrew</span>
+        <span class="thread-time">just now</span>
+        <div class="thread-text">${text}</div>
+      </div>`;
+    thread.insertBefore(msg, compose);
+    input.value = '';
+    const counter = document.getElementById('tc-' + id);
+    if (counter) counter.textContent = parseInt(counter.textContent || '0') + 1;
+  }
+
+  // ── TASK MENU TOGGLE ───────────────────────────────────────
+  function toggleTaskMenu(btn) {
+    const menu = btn.nextElementSibling;
+    const isOpen = menu.classList.toggle('open');
+    if (isOpen) {
+      document.addEventListener('click', function handler(e) {
+        if (!btn.contains(e.target) && !menu.contains(e.target)) {
+          menu.classList.remove('open');
+          document.removeEventListener('click', handler);
+        }
+      }, { capture: true });
+    }
+  }
+
+  function moveTaskWeek(id) {
+    const card = document.querySelector(`[data-task-id="${id}"]`);
+    if (!card) return;
+    const title = card.querySelector('.task-title')?.textContent || 'Task';
+    card.style.transition = 'opacity 0.3s';
+    card.style.opacity = '0.4';
+    setTimeout(() => card.remove(), 300);
+    showUndoToast(`"${title}" moved to next week`);
+  }
+
+  function moveTask(id, dir) {
+    const card = document.querySelector(`[data-task-id="${id}"]`);
+    if (!card) return;
+    if (dir === 'up' && card.previousElementSibling?.classList.contains('task-card')) {
+      card.parentNode.insertBefore(card, card.previousElementSibling);
+    } else if (dir === 'down' && card.nextElementSibling?.classList.contains('task-card')) {
+      card.parentNode.insertBefore(card.nextElementSibling, card);
+    }
+  }
+
+  // ── CARRY-OVER ─────────────────────────────────────────────
+  function moveCarryOver(coId, title, type) {
+    const item = document.querySelector(`[data-co-id="${coId}"]`);
+    if (item) { item.style.opacity = '0.4'; setTimeout(() => item.remove(), 300); }
+
+    // Add to my tasks list
+    const list = document.getElementById('my-tasks-list');
+    const newId = 'co-' + coId;
+    const card = document.createElement('div');
+    card.className = 'task-card carry-moved';
+    card.dataset.taskId = newId;
+    card.innerHTML = `<button class="status-btn todo" onclick="cycleStatus(this)" title="To do"></button>
+      <div class="task-body">
+        <div class="task-title">${title}</div>
+        <div class="task-meta">
+          <span class="tag tag-default">${type}</span>
+          <span class="tag" style="background:#FEF3C7;color:#92400E;font-size:9px">Carried over</span>
+          <span class="status-badge status-todo"><span class="status-dot todo"></span> To do</span>
+        </div>
+      </div>
+      <div class="task-actions">
+        <div class="task-menu-wrap"><button class="task-menu-btn" onclick="toggleTaskMenu(this)">⋮</button>
+          <div class="task-menu"><button onclick="moveTaskWeek('${newId}')">Move to next week</button></div>
+        </div>
+      </div>`;
+    list.appendChild(card);
+
+    // Hide carry-over section if empty
+    const remaining = document.querySelectorAll('[data-co-id]');
+    if (remaining.length <= 1) {
+      setTimeout(() => { document.getElementById('carry-over-section')?.remove(); }, 350);
+    }
+
+    showUndoToast(`"${title}" added to this week`);
+  }
+
+  function showUndoToast(msg) {
+    let toast = document.getElementById('undo-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'undo-toast';
+      toast.className = 'undo-toast';
+      document.body.appendChild(toast);
+    }
+    toast.innerHTML = `<span>${msg}</span><button class="undo-btn" onclick="this.closest('.undo-toast').classList.remove('visible')">Undo</button>`;
+    toast.classList.add('visible');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => toast.classList.remove('visible'), 3500);
+  }
+</script>
+</body>
+</html>

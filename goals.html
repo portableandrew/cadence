@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Goals — Cadence</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1>Goals</h1>
+        <div class="header-sub">Q1 2026 &nbsp;·&nbsp; 15 active goals across 5 people</div>
+      </div>
+      <div class="flex items-center gap-8">
+        <div class="view-toggle">
+          <button class="vt-btn active" id="vt-mine" onclick="switchView('mine')">My Goals</button>
+          <button class="vt-btn" id="vt-team" onclick="switchView('team')">Team Goals</button>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="openModal('goal-modal')">+ New goal</button>
+      </div>
+    </div>
+
+    <div class="page-body">
+
+      <!-- QUARTERLY OBJECTIVES (admin-set, always visible) -->
+      <div class="qobj-section mb-24">
+        <div class="flex items-center justify-between mb-12">
+          <div class="section-heading" style="margin-bottom:0">Q1 2026 — Company objectives</div>
+          <button class="btn btn-ghost btn-sm" onclick="openModal('qobj-modal')">+ Add objective</button>
+        </div>
+        <div class="qobj-grid">
+
+          <div class="qobj-card">
+            <div class="qobj-header">
+              <div class="qobj-num">01</div>
+              <div class="qobj-title">Reach $10M ARR milestone</div>
+              <span class="tag tag-lime" style="margin-left:auto; flex-shrink:0">On track</span>
+            </div>
+            <div class="qobj-progress-row">
+              <span class="qobj-pct">72%</span>
+              <span class="qobj-sub">towards target</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill green" style="width:72%"></div></div>
+            <div class="qobj-owners">
+              <div class="avatar avatar-andrew" style="width:18px;height:18px;font-size:8px">A</div>
+              <div class="avatar avatar-luke" style="width:18px;height:18px;font-size:8px;margin-left:-5px">L</div>
+              <span class="qobj-owner-label">Andrew, Luke</span>
+            </div>
+          </div>
+
+          <div class="qobj-card">
+            <div class="qobj-header">
+              <div class="qobj-num">02</div>
+              <div class="qobj-title">Ship Cadence to production</div>
+              <span class="tag tag-amber" style="margin-left:auto; flex-shrink:0">At risk</span>
+            </div>
+            <div class="qobj-progress-row">
+              <span class="qobj-pct">41%</span>
+              <span class="qobj-sub">towards target</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill" style="width:41%"></div></div>
+            <div class="qobj-owners">
+              <div class="avatar avatar-dave" style="width:18px;height:18px;font-size:8px">D</div>
+              <div class="avatar avatar-paul" style="width:18px;height:18px;font-size:8px;margin-left:-5px">P</div>
+              <span class="qobj-owner-label">Dave, Paul</span>
+            </div>
+          </div>
+
+          <div class="qobj-card">
+            <div class="qobj-header">
+              <div class="qobj-num">03</div>
+              <div class="qobj-title">Complete brand & CX foundation</div>
+              <span class="tag tag-lime" style="margin-left:auto; flex-shrink:0">On track</span>
+            </div>
+            <div class="qobj-progress-row">
+              <span class="qobj-pct">58%</span>
+              <span class="qobj-sub">towards target</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill green" style="width:58%"></div></div>
+            <div class="qobj-owners">
+              <div class="avatar avatar-sarah" style="width:18px;height:18px;font-size:8px">S</div>
+              <span class="qobj-owner-label">Sarah</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="divider mb-20"></div>
+
+      <!-- MY GOALS VIEW -->
+      <div id="view-mine">
+        <div class="section-heading mb-12">Highlighted — top priority</div>
+
+        <div class="goal-card highlighted">
+          <div class="goal-card-header">
+            <div class="goal-title">Scale revenue to $10M ARR</div>
+            <div class="flex gap-6">
+              <span class="tag tag-purple">Strategic</span>
+              <span class="tag tag-amber">Q2 2026</span>
+            </div>
+          </div>
+          <div class="goal-meta">
+            <span class="tag tag-default">Revenue</span>
+            <span style="font-size:12px; color:var(--mid)">Due 30 Apr 2026</span>
+          </div>
+          <div class="goal-progress-row">
+            <span>2 / 8 tasks done</span>
+            <button class="goal-add-task-link" onclick="toggleGoalTaskAdd('gtasks-revenue')">+ Add task</button>
+          </div>
+          <div class="goal-task-add hidden" id="gtasks-revenue">
+            <div class="flex gap-8 mt-6">
+              <input type="text" class="form-input form-input-sm" style="flex:1" placeholder="Task name…">
+              <select class="form-input form-select form-input-sm" style="width:110px">
+                <option>Andrew</option><option>Luke</option><option>Dave</option><option>Sarah</option><option>Paul</option>
+              </select>
+              <button class="btn btn-primary btn-xs" onclick="submitGoalTask(this)">Add</button>
+              <button class="btn btn-ghost btn-xs" onclick="toggleGoalTaskAdd('gtasks-revenue')">✕</button>
+            </div>
+          </div>
+          <div class="goal-footer">
+            <span class="tag tag-lime">Active</span>
+            <div class="flex gap-6">
+              <button class="btn btn-ghost btn-sm">Edit</button>
+              <button class="btn btn-secondary btn-sm">✓ Mark complete</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-heading mt-20 mb-12">Active goals</div>
+
+        <div class="goal-card">
+          <div class="goal-card-header">
+            <div class="goal-title">Launch new enterprise tier</div>
+            <div class="flex gap-6">
+              <span class="tag tag-purple">Strategic</span>
+              <span class="tag tag-amber">Q2 2026</span>
+            </div>
+          </div>
+          <div class="goal-meta">
+            <span class="tag tag-default">Product</span>
+            <span style="font-size:12px; color:var(--mid)">Due 31 Mar 2026</span>
+          </div>
+          <div class="goal-progress-row">
+            <span>1 / 5 tasks done</span>
+            <button class="goal-add-task-link" onclick="toggleGoalTaskAdd('gtasks-enterprise')">+ Add task</button>
+          </div>
+          <div class="goal-task-add hidden" id="gtasks-enterprise">
+            <div class="flex gap-8 mt-6">
+              <input type="text" class="form-input form-input-sm" style="flex:1" placeholder="Task name…">
+              <select class="form-input form-select form-input-sm" style="width:110px">
+                <option>Andrew</option><option>Luke</option><option>Dave</option><option>Sarah</option><option>Paul</option>
+              </select>
+              <button class="btn btn-primary btn-xs" onclick="submitGoalTask(this)">Add</button>
+              <button class="btn btn-ghost btn-xs" onclick="toggleGoalTaskAdd('gtasks-enterprise')">✕</button>
+            </div>
+          </div>
+          <div class="goal-footer">
+            <span class="tag tag-lime">Active</span>
+            <div class="flex gap-6">
+              <button class="btn btn-ghost btn-sm">Edit</button>
+              <button class="btn btn-secondary btn-sm">✓ Mark complete</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="goal-card">
+          <div class="goal-card-header">
+            <div class="goal-title">Implement quarterly OKR process</div>
+            <div class="flex gap-6">
+              <span class="tag tag-default">Operational</span>
+              <span class="tag tag-amber">Q1 2026</span>
+              <span class="shift-badge">↗ Shifted 1×</span>
+            </div>
+          </div>
+          <div class="goal-meta">
+            <span class="tag tag-default">Process</span>
+            <span style="font-size:12px; color:var(--mid)">Due 15 Mar 2026 &nbsp;·&nbsp;</span>
+            <span style="font-size:12px; color:#C2410C">Original: 28 Feb 2026</span>
+          </div>
+          <div style="margin:8px 0 10px; padding:8px 12px; background:#FFFBEB; border-radius:6px; font-size:12px; color:#92400E">
+            <strong>Shift history:</strong> 28 Feb → 15 Mar — "Delayed due to board prep taking priority"
+          </div>
+          <div class="goal-progress-row">
+            <span>3 / 6 tasks done</span>
+            <button class="goal-add-task-link" onclick="toggleGoalTaskAdd('gtasks-okr')">+ Add task</button>
+          </div>
+          <div class="goal-task-add hidden" id="gtasks-okr">
+            <div class="flex gap-8 mt-6">
+              <input type="text" class="form-input form-input-sm" style="flex:1" placeholder="Task name…">
+              <select class="form-input form-select form-input-sm" style="width:110px">
+                <option>Andrew</option><option>Luke</option><option>Dave</option><option>Sarah</option><option>Paul</option>
+              </select>
+              <button class="btn btn-primary btn-xs" onclick="submitGoalTask(this)">Add</button>
+              <button class="btn btn-ghost btn-xs" onclick="toggleGoalTaskAdd('gtasks-okr')">✕</button>
+            </div>
+          </div>
+          <div class="goal-footer">
+            <span class="tag tag-lime">Active</span>
+            <div class="flex gap-6">
+              <button class="btn btn-ghost btn-sm">Edit</button>
+              <button class="btn btn-secondary btn-sm">✓ Mark complete</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ARCHIVE -->
+        <div class="section-heading mt-24 mb-12" style="display:flex; align-items:center; justify-content:space-between">
+          <span>Completed goals</span>
+          <button class="btn btn-ghost btn-sm" id="archive-toggle" onclick="toggleArchive()">Show archive</button>
+        </div>
+        <div id="archive-section" class="hidden">
+          <div class="goal-card" style="opacity:0.7">
+            <div class="goal-card-header">
+              <div class="goal-title" style="text-decoration:line-through; color:var(--mid)">Hire VP of Sales</div>
+              <span class="tag tag-default">Completed</span>
+            </div>
+            <div class="goal-meta">
+              <span style="font-size:12px; color:var(--mid)">Completed 14 Jan 2026 &nbsp;·&nbsp; Took 47 days</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TEAM GOALS VIEW (hidden by default) -->
+      <div id="view-team" class="hidden">
+
+        <!-- Andrew -->
+        <div class="section-heading mb-12">
+          <div style="display:flex; align-items:center; gap:8px">
+            <div class="avatar avatar-andrew avatar-sm">A</div> Andrew
+          </div>
+        </div>
+        <div class="goal-card highlighted" style="margin-bottom:8px">
+          <div class="goal-card-header">
+            <div class="goal-title">Scale revenue to $10M ARR</div>
+            <span class="tag tag-purple">Strategic</span>
+          </div>
+          <div class="goal-progress-row"><span>2 / 8 tasks</span></div>
+        </div>
+        <div class="goal-card" style="margin-bottom:8px">
+          <div class="goal-card-header">
+            <div class="goal-title">Launch new enterprise tier</div>
+            <span class="tag tag-purple">Strategic</span>
+          </div>
+          <div class="goal-progress-row"><span>1 / 5 tasks</span></div>
+        </div>
+
+        <!-- Dave -->
+        <div class="section-heading mt-20 mb-12">
+          <div style="display:flex; align-items:center; gap:8px">
+            <div class="avatar avatar-dave avatar-sm">D</div> Dave
+          </div>
+        </div>
+        <div class="goal-card highlighted" style="margin-bottom:8px">
+          <div class="goal-card-header">
+            <div class="goal-title">Ship Cadence v1.0</div>
+            <span class="tag tag-purple">Strategic</span>
+          </div>
+          <div class="goal-progress-row"><span>3 / 7 tasks</span></div>
+        </div>
+        <div class="goal-card" style="margin-bottom:8px">
+          <div class="goal-card-header">
+            <div class="goal-title">Migrate to new infrastructure</div>
+            <div class="flex gap-6">
+              <span class="tag tag-purple">Strategic</span>
+              <span class="shift-badge">↗ Shifted 2×</span>
+            </div>
+          </div>
+          <div class="goal-progress-row"><span>0 / 4 tasks</span></div>
+        </div>
+
+        <!-- Sarah -->
+        <div class="section-heading mt-20 mb-12">
+          <div style="display:flex; align-items:center; gap:8px">
+            <div class="avatar avatar-sarah avatar-sm">S</div> Sarah
+          </div>
+        </div>
+        <div class="goal-card highlighted" style="margin-bottom:8px">
+          <div class="goal-card-header">
+            <div class="goal-title">Complete customer journey mapping</div>
+            <span class="tag tag-purple">Strategic</span>
+          </div>
+          <div class="goal-progress-row"><span>1 / 4 tasks</span></div>
+        </div>
+        <div class="goal-card" style="margin-bottom:8px">
+          <div class="goal-card-header">
+            <div class="goal-title">Launch brand refresh</div>
+            <span class="tag tag-purple">Strategic</span>
+          </div>
+          <div class="goal-progress-row"><span>2 / 6 tasks</span></div>
+        </div>
+
+        <!-- Luke -->
+        <div class="section-heading mt-20 mb-12">
+          <div style="display:flex; align-items:center; gap:8px">
+            <div class="avatar avatar-luke avatar-sm">L</div> Luke
+          </div>
+        </div>
+        <div class="goal-card highlighted" style="margin-bottom:8px">
+          <div class="goal-card-header">
+            <div class="goal-title">Win 3 new enterprise accounts</div>
+            <span class="tag tag-purple">Strategic</span>
+          </div>
+          <div class="goal-progress-row"><span>1 / 6 tasks</span></div>
+        </div>
+
+        <!-- Paul -->
+        <div class="section-heading mt-20 mb-12">
+          <div style="display:flex; align-items:center; gap:8px">
+            <div class="avatar avatar-paul avatar-sm">P</div> Paul
+          </div>
+        </div>
+        <div class="goal-card highlighted" style="margin-bottom:8px">
+          <div class="goal-card-header">
+            <div class="goal-title">Launch user research programme</div>
+            <span class="tag tag-purple">Strategic</span>
+          </div>
+          <div class="goal-progress-row"><span>0 / 5 tasks</span></div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- QUARTERLY OBJECTIVE MODAL -->
+<div class="modal-overlay" id="qobj-modal">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-header">
+      <div><h2>Add company objective</h2><div class="modal-sub">Set a top-level Q1 2026 objective for the team.</div></div>
+      <button class="modal-close" onclick="closeModal('qobj-modal')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Objective title</label>
+        <input type="text" class="form-input" placeholder="e.g. Reach $10M ARR">
+      </div>
+      <div class="flex gap-12">
+        <div class="form-group flex-1">
+          <label class="form-label">Quarter</label>
+          <select class="form-input form-select">
+            <option selected>Q1-2026</option><option>Q2-2026</option><option>Q3-2026</option><option>Q4-2026</option>
+          </select>
+        </div>
+        <div class="form-group flex-1">
+          <label class="form-label">Status</label>
+          <select class="form-input form-select">
+            <option>On track</option><option>At risk</option><option>Off track</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Scope</label>
+        <div class="flex gap-6">
+          <label class="scope-opt active" id="qobj-scope-team-lbl">
+            <input type="radio" name="qobj-scope" value="team" checked onchange="setQobjScope('team')">
+            Team / Group
+          </label>
+          <label class="scope-opt" id="qobj-scope-personal-lbl">
+            <input type="radio" name="qobj-scope" value="personal" onchange="setQobjScope('personal')">
+            Personal
+          </label>
+        </div>
+      </div>
+      <div class="form-group" id="qobj-group-row">
+        <label class="form-label">Group</label>
+        <select class="form-input form-select">
+          <option>Fixation</option><option>Paradise</option><option>GEM</option>
+          <option>Atomica</option><option>Midynte City</option>
+          <option>Business Support</option><option>SLT</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Owner(s)</label>
+        <div class="flex gap-8" style="flex-wrap:wrap">
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" style="accent-color:var(--purple)"> Andrew</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" style="accent-color:var(--purple)"> Luke</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" style="accent-color:var(--purple)"> Dave</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" style="accent-color:var(--purple)"> Sarah</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" style="accent-color:var(--purple)"> Paul</label>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('qobj-modal')">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="closeModal('qobj-modal')">Create objective</button>
+    </div>
+  </div>
+</div>
+
+<!-- NEW GOAL MODAL -->
+<div class="modal-overlay" id="goal-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div><h2>New goal</h2></div>
+      <button class="modal-close" onclick="closeModal('goal-modal')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Goal title</label>
+        <input type="text" class="form-input" placeholder="What are you aiming to achieve?">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description (optional)</label>
+        <textarea class="form-input" placeholder="Add context or success criteria…"></textarea>
+      </div>
+      <div class="flex gap-12">
+        <div class="form-group flex-1">
+          <label class="form-label">Type</label>
+          <select class="form-input form-select">
+            <option>Strategic</option><option>Operational</option>
+          </select>
+        </div>
+        <div class="form-group flex-1">
+          <label class="form-label">Category</label>
+          <input type="text" class="form-input" placeholder="e.g. Revenue, Product…" list="category-suggestions">
+          <datalist id="category-suggestions">
+            <option>Revenue</option><option>Product</option><option>Design</option><option>Process</option><option>People</option>
+          </datalist>
+        </div>
+      </div>
+      <!-- Scope + Group -->
+      <div class="flex gap-12">
+        <div class="form-group flex-1">
+          <label class="form-label">Scope</label>
+          <div class="flex gap-6">
+            <label class="scope-opt active" id="goal-scope-team-lbl">
+              <input type="radio" name="goal-scope" value="team" checked onchange="setGoalScope('team')">
+              Team / Group
+            </label>
+            <label class="scope-opt" id="goal-scope-personal-lbl">
+              <input type="radio" name="goal-scope" value="personal" onchange="setGoalScope('personal')">
+              Personal
+            </label>
+          </div>
+        </div>
+        <div class="form-group flex-1" id="goal-group-row">
+          <label class="form-label">Group</label>
+          <select class="form-input form-select">
+            <option>Fixation</option><option>Paradise</option><option>GEM</option>
+            <option>Atomica</option><option>Midynte City</option>
+            <option>Business Support</option><option>SLT</option>
+          </select>
+        </div>
+      </div>
+      <div class="flex gap-12">
+        <div class="form-group flex-1">
+          <label class="form-label">Target date</label>
+          <input type="date" class="form-input" value="2026-03-31">
+        </div>
+        <div class="form-group flex-1">
+          <label class="form-label">Quarter</label>
+          <select class="form-input form-select">
+            <option>Q1-2026</option><option>Q2-2026</option><option>Q3-2026</option><option>Q4-2026</option>
+          </select>
+        </div>
+      </div>
+      <!-- Tasks -->
+      <div class="form-group">
+        <label class="form-label">Tasks <span class="text-mid" style="font-weight:400; text-transform:none; letter-spacing:0">(optional — add tasks to track progress)</span></label>
+        <div id="goal-modal-tasks"></div>
+        <button class="add-task-btn mt-6" onclick="addModalTask('goal-modal-tasks')">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add task
+        </button>
+      </div>
+      <div class="form-group mb-4">
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:13px; font-weight:600">
+          <input type="checkbox" style="width:16px; height:16px; accent-color:var(--purple)">
+          Highlight as top priority (Admin only)
+        </label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('goal-modal')">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="closeModal('goal-modal')">Create goal</button>
+    </div>
+  </div>
+</div>
+
+<script src="nav.js"></script>
+<script>
+  function switchView(v) {
+    document.getElementById('view-mine').classList.toggle('hidden', v !== 'mine');
+    document.getElementById('view-team').classList.toggle('hidden', v !== 'team');
+    document.getElementById('vt-mine').classList.toggle('active', v === 'mine');
+    document.getElementById('vt-team').classList.toggle('active', v === 'team');
+  }
+  function toggleArchive() {
+    const el = document.getElementById('archive-section');
+    const btn = document.getElementById('archive-toggle');
+    const hidden = el.classList.toggle('hidden');
+    btn.textContent = hidden ? 'Show archive' : 'Hide archive';
+  }
+
+  // ── SCOPE TOGGLES ──────────────────────────────────────────
+  function setGoalScope(scope) {
+    document.getElementById('goal-group-row').classList.toggle('hidden', scope !== 'team');
+    document.getElementById('goal-scope-team-lbl').classList.toggle('active', scope === 'team');
+    document.getElementById('goal-scope-personal-lbl').classList.toggle('active', scope === 'personal');
+  }
+  function setQobjScope(scope) {
+    document.getElementById('qobj-group-row').classList.toggle('hidden', scope !== 'team');
+    document.getElementById('qobj-scope-team-lbl').classList.toggle('active', scope === 'team');
+    document.getElementById('qobj-scope-personal-lbl').classList.toggle('active', scope === 'personal');
+  }
+
+  // ── GOAL INLINE TASK ADD ────────────────────────────────────
+  function toggleGoalTaskAdd(id) {
+    document.getElementById(id).classList.toggle('hidden');
+    const wrap = document.getElementById(id);
+    if (!wrap.classList.contains('hidden')) {
+      wrap.querySelector('input')?.focus();
+    }
+  }
+  function submitGoalTask(btn) {
+    const wrap = btn.closest('.goal-task-add');
+    const input = wrap.querySelector('input[type="text"]');
+    const name  = input.value.trim();
+    if (!name) return;
+    // In the real app this would save; for the prototype just close and show toast
+    input.value = '';
+    wrap.classList.add('hidden');
+    // Update task count display (simple increment demo)
+    const progressRow = wrap.previousElementSibling;
+    const countSpan = progressRow.querySelector('span');
+    if (countSpan) {
+      const match = countSpan.textContent.match(/(\d+)\s*\/\s*(\d+)/);
+      if (match) {
+        countSpan.textContent = `${match[1]} / ${parseInt(match[2]) + 1} tasks done`;
+      }
+    }
+  }
+
+  // ── MODAL TASK LIST (New Goal modal) ───────────────────────
+  function addModalTask(listId) {
+    const list = document.getElementById(listId);
+    const row = document.createElement('div');
+    row.className = 'entry-row';
+    row.innerHTML = `<span class="entry-bullet">•</span>
+      <input type="text" class="entry-input" placeholder="Task name…">
+      <button class="entry-remove" onclick="this.closest('.entry-row').remove()">×</button>`;
+    list.appendChild(row);
+    row.querySelector('.entry-input').focus();
+  }
+</script>
+</body>
+</html>

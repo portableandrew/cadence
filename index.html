@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — Cadence</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1>Good morning, Andrew 👋</h1>
+        <div class="header-sub">Monday, 16 March 2026 &nbsp;·&nbsp; Week 12 of Q1</div>
+      </div>
+      <div class="flex items-center gap-8">
+        <span class="tag tag-amber">Q1 ends in 15 days</span>
+        <a href="wip.html" class="btn btn-primary btn-sm">Open Monday WIP →</a>
+      </div>
+    </div>
+
+    <div class="page-body">
+
+      <!-- SUGGESTION STRIP -->
+      <div class="suggestion-strip">
+        <span>💡 Dave has 8 tasks this week — above the 6-task target. Review before the Monday meeting.</span>
+        <a href="wip.html" style="font-style:normal; font-weight:700; color:var(--purple); font-size:12px; white-space:nowrap">Review WIP →</a>
+      </div>
+
+      <!-- STATS ROW -->
+      <div class="dash-grid mb-24">
+        <div class="stat-card">
+          <div class="stat-number purple">21</div>
+          <div class="stat-label">Tasks this week</div>
+          <div style="margin-top:10px">
+            <div class="progress-track">
+              <div class="progress-fill" style="width:19%"></div>
+            </div>
+            <div class="text-xs text-mid mt-4">4 of 21 done</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number green">4</div>
+          <div class="stat-label">Completed today</div>
+          <div style="margin-top:10px">
+            <div class="flex gap-4">
+              <span class="tag tag-lime">+2 vs last week</span>
+            </div>
+          </div>
+        </div>
+        <div class="stat-card card-accent-lime" style="border-left-width:3px">
+          <div class="stat-number" style="color:#D97706">3</div>
+          <div class="stat-label">Overdue tasks</div>
+          <div style="margin-top:10px">
+            <a href="tasks.html" class="text-xs text-purple font-600">View overdue →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUICK ACTIONS -->
+      <div class="section-heading">Quick actions</div>
+      <div class="quick-actions mb-24">
+        <a href="wip.html" class="quick-action-card">
+          <div class="quick-action-icon">📅</div>
+          <div class="quick-action-title">Monday WIP</div>
+          <div class="quick-action-sub">Review this week's tasks across the team</div>
+        </a>
+        <a href="checkin.html" class="quick-action-card">
+          <div class="quick-action-icon">📋</div>
+          <div class="quick-action-title">Thursday Check-in</div>
+          <div class="quick-action-sub">3 of 5 submitted — yours is pending</div>
+        </a>
+        <a href="goals.html" class="quick-action-card">
+          <div class="quick-action-icon">🎯</div>
+          <div class="quick-action-title">My Goals</div>
+          <div class="quick-action-sub">3 active goals · 1 highlighted</div>
+        </a>
+      </div>
+
+      <!-- HIGHLIGHTED GOALS -->
+      <div class="section-heading">Top priority goals</div>
+      <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap:12px; margin-bottom:24px">
+
+        <div class="goal-card highlighted">
+          <div class="goal-card-header">
+            <div class="goal-title">Scale revenue to $10M ARR</div>
+            <span class="tag tag-purple">Strategic</span>
+          </div>
+          <div class="goal-meta">
+            <span class="tag tag-default">Revenue</span>
+            <span class="tag tag-amber">Q2 2026</span>
+          </div>
+          <div class="goal-progress-row"><span>Progress</span><span>2 / 8 tasks done</span></div>
+          <div class="progress-track"><div class="progress-fill" style="width:25%"></div></div>
+        </div>
+
+        <div class="goal-card highlighted">
+          <div class="goal-card-header">
+            <div class="goal-title">Ship Cadence v1.0</div>
+            <span class="tag tag-purple">Strategic</span>
+          </div>
+          <div class="goal-meta">
+            <span class="tag tag-default">Product</span>
+            <span class="tag tag-amber">Q1 2026</span>
+          </div>
+          <div class="goal-progress-row"><span>Progress</span><span>3 / 7 tasks done</span></div>
+          <div class="progress-track"><div class="progress-fill" style="width:43%"></div></div>
+        </div>
+
+        <div class="goal-card highlighted">
+          <div class="goal-card-header">
+            <div class="goal-title">Complete customer journey mapping</div>
+            <span class="tag tag-purple">Strategic</span>
+          </div>
+          <div class="goal-meta">
+            <span class="tag tag-default">Design</span>
+            <span class="tag tag-amber">Q1 2026</span>
+          </div>
+          <div class="goal-progress-row"><span>Progress</span><span>1 / 4 tasks done</span></div>
+          <div class="progress-track"><div class="progress-fill" style="width:25%"></div></div>
+        </div>
+
+      </div>
+
+      <!-- OVERDUE TASKS -->
+      <div class="section-heading">Overdue tasks</div>
+      <div class="card" style="padding:0; overflow:hidden">
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 16px; border-bottom:1px solid var(--border)">
+          <div style="display:flex; align-items:center; gap:10px">
+            <div class="avatar avatar-dave avatar-sm">D</div>
+            <span style="font-size:13px; font-weight:600">Reduce deploy time to &lt;5 min</span>
+          </div>
+          <div class="flex items-center gap-6">
+            <span class="tag tag-red">3 days overdue</span>
+            <button class="btn btn-xs btn-ghost">Move to this week</button>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 16px; border-bottom:1px solid var(--border)">
+          <div style="display:flex; align-items:center; gap:10px">
+            <div class="avatar avatar-paul avatar-sm">P</div>
+            <span style="font-size:13px; font-weight:600">Weekly product-engineering sync</span>
+          </div>
+          <div class="flex items-center gap-6">
+            <span class="tag tag-red">1 day overdue</span>
+            <button class="btn btn-xs btn-ghost">Move to this week</button>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 16px">
+          <div style="display:flex; align-items:center; gap:10px">
+            <div class="avatar avatar-luke avatar-sm">L</div>
+            <span style="font-size:13px; font-weight:600">Rebuild sales playbook</span>
+          </div>
+          <div class="flex items-center gap-6">
+            <span class="tag tag-red">5 days overdue</span>
+            <button class="btn btn-xs btn-ghost">Move to this week</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+<script src="nav.js"></script>
+</body>
+</html>

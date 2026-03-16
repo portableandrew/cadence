@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meetings — Cadence</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1>Meetings</h1>
+        <div class="header-sub">3 upcoming &nbsp;·&nbsp; Week of 16 March 2026</div>
+      </div>
+    </div>
+
+    <div class="page-body">
+
+      <!-- ══════════════════════════════════════════
+           UPCOMING MEETINGS
+           ══════════════════════════════════════════ -->
+      <div class="section-heading mb-12">Upcoming meetings</div>
+
+      <!-- Mon 16 Mar -->
+      <div class="past-meeting-item">
+        <div class="past-meeting-row" onclick="togglePastMeeting(this)">
+          <div class="flex items-center gap-12">
+            <div class="past-meeting-badge" style="background:var(--black)">
+              <div class="mdb-day" style="color:#fff;opacity:0.7">Mon</div>
+              <div class="mdb-num" style="color:#fff">16</div>
+            </div>
+            <div>
+              <div style="font-weight:700;font-size:14px">Monday WIP</div>
+              <div class="text-xs text-mid">16 March 2026 &nbsp;·&nbsp; 3:30pm – 4:30pm &nbsp;·&nbsp; 60 min</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-8">
+            <div class="meeting-attendees" style="margin:0">
+              <div class="avatar avatar-andrew" style="width:20px;height:20px;font-size:8px">A</div>
+              <div class="avatar avatar-luke" style="width:20px;height:20px;font-size:8px;margin-left:-5px">L</div>
+              <div class="avatar avatar-dave" style="width:20px;height:20px;font-size:8px;margin-left:-5px">D</div>
+              <div class="avatar avatar-sarah" style="width:20px;height:20px;font-size:8px;margin-left:-5px">S</div>
+              <div class="avatar avatar-paul" style="width:20px;height:20px;font-size:8px;margin-left:-5px">P</div>
+            </div>
+            <span class="tag tag-default">4 agenda items</span>
+            <span class="chevron">›</span>
+          </div>
+        </div>
+        <div class="past-meeting-body">
+          <div class="past-agenda-item">
+            <span class="pa-num">1</span>
+            <div class="pa-content">
+              <div class="pa-title">Q1 board deck — slide structure and owners</div>
+              <div class="pa-source text-xs text-mid">Andrew · custom item</div>
+            </div>
+            <span class="tag tag-default" style="flex-shrink:0">10 min</span>
+          </div>
+          <div class="past-agenda-item">
+            <span class="pa-num">2</span>
+            <div class="pa-content">
+              <div class="pa-title">AWS infrastructure cost overrun — 30% over Q1</div>
+              <div class="pa-source text-xs text-mid">Dave's update · ⚡ Challenge</div>
+            </div>
+            <span class="tag tag-default" style="flex-shrink:0">15 min</span>
+          </div>
+          <div class="past-agenda-item">
+            <span class="pa-num">3</span>
+            <div class="pa-content">
+              <div class="pa-title">TechCorp feature request — decision needed</div>
+              <div class="pa-source text-xs text-mid">Luke's update · ⚡ Challenge</div>
+            </div>
+            <span class="tag tag-default" style="flex-shrink:0">10 min</span>
+          </div>
+          <div class="past-agenda-item">
+            <span class="pa-num">4</span>
+            <div class="pa-content">
+              <div class="pa-title">Cadence prototype progress update</div>
+              <div class="pa-source text-xs text-mid">Dave's update · 🏆 Win</div>
+            </div>
+            <span class="tag tag-default" style="flex-shrink:0">10 min</span>
+          </div>
+          <div style="margin-top:12px">
+            <button class="btn btn-primary btn-sm" onclick="openAgenda('mon')">▶ Start meeting</button>
+            <button class="btn btn-ghost btn-sm" onclick="openAgendaBuilder('mon')" style="margin-left:8px">Edit agenda</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fri 20 Mar -->
+      <div class="past-meeting-item">
+        <div class="past-meeting-row" onclick="togglePastMeeting(this)">
+          <div class="flex items-center gap-12">
+            <div class="past-meeting-badge" style="background:#1D4ED8">
+              <div class="mdb-day" style="color:#fff;opacity:0.7">Fri</div>
+              <div class="mdb-num" style="color:#fff">20</div>
+            </div>
+            <div>
+              <div style="font-weight:700;font-size:14px">Friday Review</div>
+              <div class="text-xs text-mid">20 March 2026 &nbsp;·&nbsp; 9:00am – 10:00am &nbsp;·&nbsp; 60 min</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-8">
+            <div class="meeting-attendees" style="margin:0">
+              <div class="avatar avatar-andrew" style="width:20px;height:20px;font-size:8px">A</div>
+              <div class="avatar avatar-luke" style="width:20px;height:20px;font-size:8px;margin-left:-5px">L</div>
+              <div class="avatar avatar-dave" style="width:20px;height:20px;font-size:8px;margin-left:-5px">D</div>
+              <div class="avatar avatar-sarah" style="width:20px;height:20px;font-size:8px;margin-left:-5px">S</div>
+              <div class="avatar avatar-paul" style="width:20px;height:20px;font-size:8px;margin-left:-5px">P</div>
+            </div>
+            <span class="tag tag-default">2 agenda items</span>
+            <span class="chevron">›</span>
+          </div>
+        </div>
+        <div class="past-meeting-body">
+          <div class="past-agenda-item">
+            <span class="pa-num">1</span>
+            <div class="pa-content">
+              <div class="pa-title">Week completion review</div>
+              <div class="pa-source text-xs text-mid">Standing item</div>
+            </div>
+            <span class="tag tag-default" style="flex-shrink:0">20 min</span>
+          </div>
+          <div class="past-agenda-item">
+            <span class="pa-num">2</span>
+            <div class="pa-content">
+              <div class="pa-title">SDR hire — job description sign-off</div>
+              <div class="pa-source text-xs text-mid">Luke · carried from Monday</div>
+            </div>
+            <span class="tag tag-default" style="flex-shrink:0">15 min</span>
+          </div>
+          <div style="margin-top:12px">
+            <button class="btn btn-primary btn-sm" onclick="openAgenda('fri')">▶ Start meeting</button>
+            <button class="btn btn-ghost btn-sm" onclick="openAgendaBuilder('fri')" style="margin-left:8px">Edit agenda</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Wed 1 Apr -->
+      <div class="past-meeting-item">
+        <div class="past-meeting-row" onclick="togglePastMeeting(this)">
+          <div class="flex items-center gap-12">
+            <div class="past-meeting-badge" style="background:var(--tag-bg)">
+              <div class="mdb-day" style="color:var(--mid)">Wed</div>
+              <div class="mdb-num" style="color:var(--black)">1</div>
+            </div>
+            <div>
+              <div style="font-weight:700;font-size:14px">Monthly Leadership</div>
+              <div class="text-xs text-mid">1 April 2026 &nbsp;·&nbsp; All day</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-8">
+            <div class="meeting-attendees" style="margin:0">
+              <div class="avatar avatar-andrew" style="width:20px;height:20px;font-size:8px">A</div>
+              <div class="avatar avatar-luke" style="width:20px;height:20px;font-size:8px;margin-left:-5px">L</div>
+              <div class="avatar avatar-dave" style="width:20px;height:20px;font-size:8px;margin-left:-5px">D</div>
+              <div class="avatar avatar-sarah" style="width:20px;height:20px;font-size:8px;margin-left:-5px">S</div>
+              <div class="avatar avatar-paul" style="width:20px;height:20px;font-size:8px;margin-left:-5px">P</div>
+            </div>
+            <span class="tag tag-default" style="color:var(--mid)">Agenda opens 27 Mar</span>
+            <span class="chevron">›</span>
+          </div>
+        </div>
+        <div class="past-meeting-body">
+          <div style="padding:12px 0 4px; color:var(--mid); font-size:13px; font-style:italic">
+            Agenda building opens 27 March. Items from Friday Updates and SLT Actions will be suggested automatically.
+          </div>
+          <div style="margin-top:12px">
+            <button class="btn btn-ghost btn-sm" onclick="openAgendaBuilder('monthly')">View agenda</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div class="divider mt-24 mb-20"></div>
+
+      <!-- ══════════════════════════════════════════
+           PAST MEETINGS
+           ══════════════════════════════════════════ -->
+      <div class="section-heading mb-12">Past meetings</div>
+
+      <!-- Mon 10 Mar -->
+      <div class="past-meeting-item">
+        <div class="past-meeting-row" onclick="togglePastMeeting(this)">
+          <div class="flex items-center gap-12">
+            <div class="past-meeting-badge"><div class="mdb-day">Mon</div><div class="mdb-num">10</div></div>
+            <div>
+              <div style="font-weight:700;font-size:14px">Monday WIP</div>
+              <div class="text-xs text-mid">10 March 2026 &nbsp;·&nbsp; 3:30pm &nbsp;·&nbsp; 55 min</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-8">
+            <span class="tag tag-default">5 items</span>
+            <span class="tag tag-default" style="color:var(--green)">2 actions</span>
+            <span class="chevron">›</span>
+          </div>
+        </div>
+        <div class="past-meeting-body">
+          <div class="past-agenda-item">
+            <span class="pa-num">1</span>
+            <div class="pa-content">
+              <div class="pa-title">Q1 board deck — slide structure and owners</div>
+              <div class="pa-source text-xs text-mid">Andrew · custom item</div>
+              <div class="pa-notes">Andrew to prepare slides 1–8. Dave to supply technical metrics by Wednesday. Agreed on executive summary format.</div>
+            </div>
+            <span class="tag tag-default" style="flex-shrink:0;color:var(--green)">Discussed</span>
+          </div>
+          <div class="past-agenda-item">
+            <span class="pa-num">2</span>
+            <div class="pa-content">
+              <div class="pa-title">AWS infrastructure cost overrun — 30% over Q1</div>
+              <div class="pa-source text-xs text-mid">Dave's check-in · ⚡ Challenge</div>
+              <div class="pa-notes">Agreed to pull detailed AWS breakdown. Andrew to approve up to $2k overage. Finance to review by EOW.</div>
+              <div class="pa-action-badge">→ Action: Pull AWS cost breakdown — Andrew — due 16 Mar</div>
+            </div>
+            <span class="tag tag-default" style="flex-shrink:0;color:var(--green)">Discussed</span>
+          </div>
+          <div class="past-agenda-item">
+            <span class="pa-num">3</span>
+            <div class="pa-content">
+              <div class="pa-title">TechCorp feature request — decision needed</div>
+              <div class="pa-source text-xs text-mid">Luke's check-in · ⚡ Challenge</div>
+              <div class="pa-notes">Luke to write scoping proposal. Paul to assess Q2 feasibility. Decision by end of week.</div>
+              <div class="pa-action-badge">→ Action: TechCorp scoping proposal — Luke — due 20 Mar</div>
+            </div>
+            <span class="tag tag-default" style="flex-shrink:0;color:var(--green)">Discussed</span>
+          </div>
+          <div class="past-agenda-item">
+            <span class="pa-num">4</span>
+            <div class="pa-content">
+              <div class="pa-title">SDR hire — job description sign-off</div>
+              <div class="pa-source text-xs text-mid">Luke · this week's priority</div>
+              <div class="pa-notes">Carried to Friday — Luke to circulate JD for comments first.</div>
+            </div>
+            <span class="tag tag-amber" style="flex-shrink:0">Carried</span>
+          </div>
+          <div class="past-agenda-item">
+            <span class="pa-num">5</span>
+            <div class="pa-content">
+              <div class="pa-title">Cadence prototype progress update</div>
+              <div class="pa-source text-xs text-mid">Dave's check-in · 🏆 Win</div>
+              <div class="pa-notes">Dave demo'd latest build. Good progress. Agreed on Friday deploy target.</div>
+            </div>
+            <span class="tag tag-default" style="flex-shrink:0;color:var(--green)">Discussed</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fri 7 Mar -->
+      <div class="past-meeting-item">
+        <div class="past-meeting-row" onclick="togglePastMeeting(this)">
+          <div class="flex items-center gap-12">
+            <div class="past-meeting-badge" style="background:#EFF6FF">
+              <div class="mdb-day" style="color:#1D4ED8">Fri</div>
+              <div class="mdb-num" style="color:#1D4ED8">7</div>
+            </div>
+            <div>
+              <div style="font-weight:700;font-size:14px">Friday Review</div>
+              <div class="text-xs text-mid">7 March 2026 &nbsp;·&nbsp; 9:00am &nbsp;·&nbsp; 42 min</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-8">
+            <span class="tag tag-default">4 items</span>
+            <span class="tag tag-default" style="color:var(--green)">3 actions</span>
+            <span class="chevron">›</span>
+          </div>
+        </div>
+        <div class="past-meeting-body">
+          <div class="past-agenda-item">
+            <span class="pa-num">1</span>
+            <div class="pa-content">
+              <div class="pa-title">Brand audit — report ready for review</div>
+              <div class="pa-source text-xs text-mid">Sarah's check-in · 🏆 Win</div>
+              <div class="pa-notes">Report reviewed. Sarah to present findings to full team next week. Tooling decision deferred to Monday.</div>
+              <div class="pa-action-badge">→ Action: Brand findings presentation — Sarah — due 20 Mar</div>
+            </div>
+            <span class="tag tag-default" style="flex-shrink:0;color:var(--green)">Discussed</span>
+          </div>
+          <div class="past-agenda-item">
+            <span class="pa-num">2</span>
+            <div class="pa-content">
+              <div class="pa-title">Q1 pipeline momentum — up 15% WoW</div>
+              <div class="pa-source text-xs text-mid">Luke's check-in · 🏆 Win</div>
+              <div class="pa-notes">Three deals moving to proposal stage. Luke to share updated forecast in board deck.</div>
+              <div class="pa-action-badge">→ Action: Updated sales forecast — Luke — due 18 Mar</div>
+            </div>
+            <span class="tag tag-default" style="flex-shrink:0;color:var(--green)">Discussed</span>
+          </div>
+          <div class="past-agenda-item">
+            <span class="pa-num">3</span>
+            <div class="pa-content">
+              <div class="pa-title">Design system tooling decision</div>
+              <div class="pa-source text-xs text-mid">Sarah's check-in · ⚡ Challenge</div>
+              <div class="pa-notes">Paul to review Figma vs Storybook and bring recommendation to Monday WIP.</div>
+              <div class="pa-action-badge">→ Action: Design tooling recommendation — Paul — due Mon 10 Mar</div>
+            </div>
+            <span class="tag tag-default" style="flex-shrink:0;color:var(--green)">Discussed</span>
+          </div>
+          <div class="past-agenda-item">
+            <span class="pa-num">4</span>
+            <div class="pa-content">
+              <div class="pa-title">Acme Corp deal update</div>
+              <div class="pa-source text-xs text-mid">Luke's check-in · 🏆 Win</div>
+              <div class="pa-notes">Discovery call complete. Luke writing proposal this week.</div>
+            </div>
+            <span class="tag tag-default" style="flex-shrink:0;color:var(--green)">Discussed</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Monthly 4 Mar -->
+      <div class="past-meeting-item">
+        <div class="past-meeting-row" onclick="togglePastMeeting(this)">
+          <div class="flex items-center gap-12">
+            <div class="past-meeting-badge"><div class="mdb-day">Wed</div><div class="mdb-num">4</div></div>
+            <div>
+              <div style="font-weight:700;font-size:14px">Monthly Leadership</div>
+              <div class="text-xs text-mid">4 March 2026 &nbsp;·&nbsp; All day &nbsp;·&nbsp; 88 min</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-8">
+            <span class="tag tag-default">8 items</span>
+            <span class="tag tag-default" style="color:var(--green)">4 actions</span>
+            <span class="chevron">›</span>
+          </div>
+        </div>
+        <div class="past-meeting-body">
+          <div class="past-agenda-item">
+            <span class="pa-num">1</span>
+            <div class="pa-content">
+              <div class="pa-title">Q1 OKR mid-point review</div>
+              <div class="pa-source text-xs text-mid">Andrew · standing item</div>
+              <div class="pa-notes">Revenue 72% — on track. Product 41% — at risk. Brand 58% — on track. Discussion on resource reallocation.</div>
+              <div class="pa-action-badge">→ Action: Product OKR resource plan — Dave + Paul — due 10 Mar</div>
+            </div>
+            <span class="tag tag-default" style="flex-shrink:0;color:var(--green)">Discussed</span>
+          </div>
+          <div class="past-agenda-item">
+            <span class="pa-num">2</span>
+            <div class="pa-content">
+              <div class="pa-title">Q2 headcount — hiring approvals</div>
+              <div class="pa-source text-xs text-mid">Andrew · strategic</div>
+              <div class="pa-notes">SDR hire approved. Engineering deferred to Q3. Luke to publish JD by end of March.</div>
+              <div class="pa-action-badge">→ Action: Publish SDR job description — Luke — due 31 Mar</div>
+            </div>
+            <span class="tag tag-default" style="flex-shrink:0;color:var(--green)">Discussed</span>
+          </div>
+          <div class="past-agenda-item">
+            <span class="pa-num">3</span>
+            <div class="pa-content">
+              <div class="pa-title">Competitive landscape — new entrant assessment</div>
+              <div class="pa-source text-xs text-mid">Luke · strategic</div>
+              <div class="pa-notes">New competitor identified. Andrew to brief board. Luke and Sarah to prepare response brief.</div>
+              <div class="pa-action-badge">→ Action: Competitive response brief — Luke + Sarah — due 17 Mar</div>
+            </div>
+            <span class="tag tag-default" style="flex-shrink:0;color:var(--green)">Discussed</span>
+          </div>
+          <div class="past-agenda-item">
+            <span class="pa-num">4</span>
+            <div class="pa-content">
+              <div class="pa-title">Infrastructure security audit — findings</div>
+              <div class="pa-source text-xs text-mid">Dave · standing item</div>
+              <div class="pa-notes">2 medium findings. Dave to prepare remediation plan.</div>
+              <div class="pa-action-badge">→ Action: Security remediation plan — Dave — due 21 Mar</div>
+            </div>
+            <span class="tag tag-default" style="flex-shrink:0;color:var(--green)">Discussed</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end page-body -->
+  </main>
+</div>
+
+<script src="nav.js"></script>
+<script>
+  function togglePastMeeting(row) {
+    const body = row.nextElementSibling;
+    const chevron = row.querySelector('.chevron');
+    if (!body) return;
+    const isOpen = body.classList.toggle('open');
+    if (chevron) chevron.classList.toggle('open', isOpen);
+  }
+
+  function openAgenda(id) {
+    alert('Meeting mode — in the real app this opens the live agenda view with timer.');
+  }
+
+  function openAgendaBuilder(id) {
+    alert('Agenda builder — in the real app this opens the agenda editor for this meeting.');
+  }
+</script>
+</body>
+</html>
