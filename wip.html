@@ -907,6 +907,115 @@
     clearTimeout(toast._t);
     toast._t = setTimeout(() => toast.classList.remove('visible'), 3500);
   }
+
+  // ── TASK NUMBERING + DRAG + IMPERATIVE ────────────────────
+
+  let dragSrc = null;
+
+  function setupCard(card, list) {
+    if (card.dataset.wipInit) return;
+    card.dataset.wipInit = '1';
+
+    // Inject drag handle (before everything)
+    const handle = document.createElement('span');
+    handle.className = 'drag-handle';
+    handle.title = 'Drag to reorder';
+    handle.innerHTML = '⠿';
+    card.insertBefore(handle, card.firstChild);
+
+    // Inject number (after handle, before status-btn)
+    const num = document.createElement('span');
+    num.className = 'task-num';
+    const statusBtn = card.querySelector('.status-btn');
+    card.insertBefore(num, statusBtn || handle.nextSibling);
+
+    // Add Imperative to ⋮ menu
+    const menu = card.querySelector('.task-menu');
+    if (menu) {
+      const div = document.createElement('div');
+      div.className = 'task-menu-divider';
+      const btn = document.createElement('button');
+      btn.className = 'imperative-btn';
+      btn.innerHTML = '⚡ Mark as imperative';
+      btn.addEventListener('click', () => toggleImperative(card, menu));
+      menu.appendChild(div);
+      menu.appendChild(btn);
+    }
+
+    // Drag: start only when handle is grabbed
+    handle.addEventListener('mousedown', () => {
+      card.setAttribute('draggable', 'true');
+    });
+    handle.addEventListener('mouseup', () => {
+      card.setAttribute('draggable', 'false');
+    });
+
+    card.addEventListener('dragstart', (e) => {
+      dragSrc = card;
+      e.dataTransfer.effectAllowed = 'move';
+      setTimeout(() => card.classList.add('is-dragging'), 0);
+    });
+
+    card.addEventListener('dragend', () => {
+      card.classList.remove('is-dragging');
+      card.setAttribute('draggable', 'false');
+      list.querySelectorAll('.task-card').forEach(c => {
+        c.classList.remove('drop-above', 'drop-below');
+      });
+      dragSrc = null;
+      updateNumbers(list);
+    });
+
+    card.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      if (!dragSrc || dragSrc === card) return;
+      list.querySelectorAll('.task-card').forEach(c => c.classList.remove('drop-above', 'drop-below'));
+      const rect = card.getBoundingClientRect();
+      const mid = rect.top + rect.height / 2;
+      if (e.clientY < mid) {
+        card.classList.add('drop-above');
+        list.insertBefore(dragSrc, card);
+      } else {
+        card.classList.add('drop-below');
+        list.insertBefore(dragSrc, card.nextSibling);
+      }
+      updateNumbers(list);
+    });
+
+    card.addEventListener('drop', (e) => {
+      e.preventDefault();
+      list.querySelectorAll('.task-card').forEach(c => c.classList.remove('drop-above', 'drop-below'));
+    });
+  }
+
+  function toggleImperative(card, menu) {
+    const isNow = card.classList.toggle('task-imperative');
+    const btn = menu?.querySelector('.imperative-btn');
+    if (btn) btn.innerHTML = isNow ? '✕ Remove imperative' : '⚡ Mark as imperative';
+    if (menu) menu.classList.remove('open');
+  }
+
+  function updateNumbers(list) {
+    list.querySelectorAll('.task-card').forEach((card, i) => {
+      const num = card.querySelector('.task-num');
+      if (num) num.textContent = i + 1;
+    });
+  }
+
+  function initTaskList(list) {
+    if (!list) return;
+    list.querySelectorAll('.task-card').forEach(card => setupCard(card, list));
+    updateNumbers(list);
+    // Watch for new cards added dynamically
+    new MutationObserver(() => {
+      list.querySelectorAll('.task-card').forEach(card => setupCard(card, list));
+      updateNumbers(list);
+    }).observe(list, { childList: true });
+  }
+
+  // Initialise all task lists on page
+  document.querySelectorAll('.task-list').forEach(list => initTaskList(list));
+
 </script>
 </body>
 </html>

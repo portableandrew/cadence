@@ -1744,6 +1744,44 @@ textarea.form-input { resize: vertical; min-height: 70px; }
    35. THIS WEEK PAGE
    ======================== */
 .wip-view { }
+
+/* Hide status labels, tags, goal-links — clean title-only view */
+.wip-view .task-meta { display: none; }
+
+/* Task number */
+.task-num {
+  min-width: 22px; text-align: right;
+  font-size: 11px; font-weight: 700; color: var(--border);
+  font-family: 'Space Mono', monospace;
+  flex-shrink: 0; padding-right: 4px;
+  transition: color 0.15s;
+}
+.task-card:hover .task-num { color: var(--light); }
+
+/* Drag handle */
+.drag-handle {
+  color: var(--border); cursor: grab;
+  font-size: 15px; line-height: 1; flex-shrink: 0;
+  padding: 0 4px 0 0; user-select: none;
+  opacity: 0; transition: opacity 0.15s, color 0.15s;
+}
+.task-card:hover .drag-handle { opacity: 1; }
+.drag-handle:hover { color: var(--mid); }
+.drag-handle:active { cursor: grabbing; }
+.task-card.is-dragging { opacity: 0.35; background: var(--tag-bg); }
+.task-card.drop-above { border-top: 2px solid var(--dark) !important; }
+.task-card.drop-below { border-bottom: 2px solid var(--dark) !important; }
+
+/* Imperative highlight */
+.task-card.task-imperative {
+  background: #FFFBEB !important;
+  border-left: 3px solid #F59E0B !important;
+}
+.task-card.task-imperative .task-title {
+  font-weight: 700; color: #78350F;
+}
+.task-card.task-imperative .task-num { color: #F59E0B !important; }
+
 .wip-prompt {
   padding: 14px 16px; margin-bottom: 20px;
   background: var(--white); border: 1px solid var(--border);
