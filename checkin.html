@@ -189,7 +189,7 @@
               </div>
 
               <div class="ci-section">
-                <div class="ci-section-label">Goals completed</div>
+                <div class="ci-section-label">Goals completed <span class="ci-goals-counter">1 / 3</span></div>
                 <div class="ci-item">
                   <div class="ci-item-text">Authentication module — shipped and deployed to production</div>
                   <div class="ci-item-actions">
@@ -198,6 +198,30 @@
                 </div>
                 <div class="ci-comment-thread">
                   <div style="display:flex; gap:8px">
+                    <input type="text" class="form-input form-input-sm" style="flex:1" placeholder="Add a comment…">
+                    <button class="btn btn-primary btn-xs">Send</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="ci-section" style="margin-bottom:0">
+                <div class="ci-section-label">Questions for the team <button class="ci-ask-btn" onclick="addQuestion(this)">+ Ask</button></div>
+                <div class="ci-item ci-q-item">
+                  <div class="ci-item-text">What's the timeline for infrastructure cost remediation?</div>
+                  <div class="ci-item-actions">
+                    <span class="comment-link has-comments" onclick="toggleCiComment(this)">💬 2</span>
+                  </div>
+                </div>
+                <div class="ci-comment-thread open">
+                  <div class="ci-comment-row">
+                    <span class="ci-comment-author">Andrew</span>
+                    <span class="ci-comment-text">We should have a plan by EOW — Dave, can you prepare options?</span>
+                  </div>
+                  <div class="ci-comment-row">
+                    <span class="ci-comment-author">Paul</span>
+                    <span class="ci-comment-text">Happy to help review cost allocation if useful.</span>
+                  </div>
+                  <div style="margin-top:8px; display:flex; gap:8px">
                     <input type="text" class="form-input form-input-sm" style="flex:1" placeholder="Add a comment…">
                     <button class="btn btn-primary btn-xs">Send</button>
                   </div>
@@ -284,6 +308,22 @@
                   </div>
                 </div>
               </div>
+
+              <div class="ci-section" style="margin-bottom:0">
+                <div class="ci-section-label">Questions for the team <button class="ci-ask-btn" onclick="addQuestion(this)">+ Ask</button></div>
+                <div class="ci-item ci-q-item">
+                  <div class="ci-item-text">Is there any budget available for the design tooling decision — or do we need to choose from what we have?</div>
+                  <div class="ci-item-actions">
+                    <span class="comment-link" onclick="toggleCiComment(this)">💬 Add comment</span>
+                  </div>
+                </div>
+                <div class="ci-comment-thread">
+                  <div style="display:flex; gap:8px">
+                    <input type="text" class="form-input form-input-sm" style="flex:1" placeholder="Add a comment…">
+                    <button class="btn btn-primary btn-xs">Send</button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -352,15 +392,39 @@
                 </div>
               </div>
               <div class="ci-section">
-                <div class="ci-section-label">Goals completed</div>
+                <div class="ci-section-label">Goals completed <span class="ci-goals-counter">1 / 4</span></div>
                 <div class="ci-item">
                   <div class="ci-item-text">Q1 sales forecast — submitted and signed off ahead of deadline</div>
                   <div class="ci-item-actions">
-                    <span class="comment-link" onclick="toggleCiComment(this)">💬 Add comment</span>
+                    <span class="comment-link has-comments" onclick="toggleCiComment(this)">💬 1</span>
                   </div>
                 </div>
-                <div class="ci-comment-thread">
-                  <div style="display:flex; gap:8px">
+                <div class="ci-comment-thread open">
+                  <div class="ci-comment-row">
+                    <span class="ci-comment-author">Andrew</span>
+                    <span class="ci-comment-text">Excellent — this is exactly what we needed for the board pack.</span>
+                  </div>
+                  <div style="margin-top:8px; display:flex; gap:8px">
+                    <input type="text" class="form-input form-input-sm" style="flex:1" placeholder="Add a comment…">
+                    <button class="btn btn-primary btn-xs">Send</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="ci-section" style="margin-bottom:0">
+                <div class="ci-section-label">Questions for the team <button class="ci-ask-btn" onclick="addQuestion(this)">+ Ask</button></div>
+                <div class="ci-item ci-q-item">
+                  <div class="ci-item-text">Who owns the TechCorp feature decision — do we need a product + sales meeting this week?</div>
+                  <div class="ci-item-actions">
+                    <span class="comment-link has-comments" onclick="toggleCiComment(this)">💬 1</span>
+                  </div>
+                </div>
+                <div class="ci-comment-thread open">
+                  <div class="ci-comment-row">
+                    <span class="ci-comment-author">Dave</span>
+                    <span class="ci-comment-text">Yes — let's do a quick call Thursday. I'll pull the feasibility notes.</span>
+                  </div>
+                  <div style="margin-top:8px; display:flex; gap:8px">
                     <input type="text" class="form-input form-input-sm" style="flex:1" placeholder="Add a comment…">
                     <button class="btn btn-primary btn-xs">Send</button>
                   </div>
@@ -814,6 +878,58 @@
 
   function submitCheckin() {
     alert('Update submitted! In the real app this saves and appears in Team View.');
+  }
+
+  // ── QUESTIONS ─────────────────────────────────────────────
+  function addQuestion(btn) {
+    const section = btn.closest('.ci-section');
+    // Don't create two compose areas
+    if (section.querySelector('.ci-q-compose')) {
+      section.querySelector('.ci-q-compose input').focus();
+      return;
+    }
+    const compose = document.createElement('div');
+    compose.className = 'ci-q-compose';
+    compose.innerHTML = `
+      <input type="text" class="form-input form-input-sm" placeholder="What do you want to ask the team?" style="width:100%;margin-top:6px">
+      <div class="flex gap-6" style="margin-top:6px">
+        <button class="btn btn-primary btn-xs" onclick="submitQuestion(this)">Ask</button>
+        <button class="btn btn-ghost btn-xs" onclick="this.closest('.ci-q-compose').remove()">Cancel</button>
+      </div>`;
+    section.appendChild(compose);
+    compose.querySelector('input').focus();
+    compose.querySelector('input').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') { e.preventDefault(); submitQuestion(compose.querySelector('.btn-primary')); }
+      if (e.key === 'Escape') compose.remove();
+    });
+  }
+
+  function submitQuestion(btn) {
+    const compose = btn.closest('.ci-q-compose');
+    const input = compose.querySelector('input');
+    const text = input.value.trim();
+    if (!text) { input.focus(); return; }
+    const section = compose.closest('.ci-section');
+    compose.remove();
+
+    // Create question item
+    const item = document.createElement('div');
+    item.className = 'ci-item ci-q-item';
+    item.innerHTML = `<div class="ci-item-text">${text}</div>
+      <div class="ci-item-actions">
+        <span class="comment-link" onclick="toggleCiComment(this)">💬 Add comment</span>
+      </div>`;
+    section.appendChild(item);
+
+    // Create open comment thread
+    const thread = document.createElement('div');
+    thread.className = 'ci-comment-thread open';
+    thread.innerHTML = `<div style="display:flex;gap:8px">
+      <input type="text" class="form-input form-input-sm" style="flex:1" placeholder="Add a comment…">
+      <button class="btn btn-primary btn-xs">Send</button>
+    </div>`;
+    section.appendChild(thread);
+    thread.querySelector('input').focus();
   }
 </script>
 </body>

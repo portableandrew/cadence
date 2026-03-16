@@ -373,6 +373,28 @@
   </main>
 </div>
 
+<!-- ══════════════════════════════════════════
+     MEETING MODE OVERLAY
+     ══════════════════════════════════════════ -->
+<div class="meeting-overlay" id="meeting-overlay">
+  <div class="mo-header">
+    <div class="mo-title-group">
+      <div class="mo-meeting-title" id="mo-meeting-title">Monday WIP</div>
+      <div class="mo-meeting-meta" id="mo-meeting-meta">16 March 2026 · 3:30pm – 4:30pm</div>
+    </div>
+    <div class="mo-timer" id="mo-timer">0:00</div>
+    <div class="mo-attendees-wrap" id="mo-attendees" style="margin-left:4px"></div>
+    <button class="btn btn-sm" style="background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.2);margin-left:8px" onclick="endMeeting()">
+      End meeting ×
+    </button>
+  </div>
+  <div class="mo-progress-bar"><div class="mo-progress-fill" id="mo-progress" style="width:0%"></div></div>
+  <div class="mo-body">
+    <div class="mo-section-label" id="mo-items-label">Agenda items</div>
+    <div id="mo-agenda-list"></div>
+  </div>
+</div>
+
 <script src="nav.js"></script>
 <script>
   function togglePastMeeting(row) {
@@ -383,8 +405,147 @@
     if (chevron) chevron.classList.toggle('open', isOpen);
   }
 
+  // ── MEETING DATA ─────────────────────────────────────────────
+  const MEETINGS_DATA = {
+    mon: {
+      title: 'Monday WIP',
+      meta: '16 March 2026 · 3:30pm – 4:30pm · 60 min',
+      attendees: ['andrew','luke','dave','sarah','paul'],
+      items: [
+        { id: 'm1', title: 'Q1 board deck — slide structure and owners',        source: 'Andrew · custom item',              dur: 10 },
+        { id: 'm2', title: 'AWS infrastructure cost overrun — 30% over Q1',     source: "Dave's update · ⚡ Challenge",        dur: 15 },
+        { id: 'm3', title: 'TechCorp feature request — decision needed',         source: "Luke's update · ⚡ Challenge",        dur: 10 },
+        { id: 'm4', title: 'Cadence prototype progress update',                  source: "Dave's update · 🏆 Win",             dur: 10 },
+      ]
+    },
+    fri: {
+      title: 'Friday Review',
+      meta: '20 March 2026 · 9:00am – 10:00am · 60 min',
+      attendees: ['andrew','luke','dave','sarah','paul'],
+      items: [
+        { id: 'f1', title: 'Week completion review',              source: 'Standing item',               dur: 20 },
+        { id: 'f2', title: 'SDR hire — job description sign-off', source: 'Luke · carried from Monday',  dur: 15 },
+      ]
+    },
+    monthly: {
+      title: 'Monthly Leadership',
+      meta: '1 April 2026 · All day',
+      attendees: ['andrew','luke','dave','sarah','paul'],
+      items: [
+        { id: 'ml1', title: 'Q1 OKR review and Q2 planning',       source: 'Andrew · standing item',   dur: 30 },
+        { id: 'ml2', title: 'Q2 headcount and hiring plan sign-off', source: 'Andrew · strategic',     dur: 20 },
+        { id: 'ml3', title: 'Competitive landscape update',          source: 'Luke · strategic',       dur: 20 },
+        { id: 'ml4', title: 'Infrastructure roadmap',                source: 'Dave · standing item',   dur: 15 },
+      ]
+    }
+  };
+
+  const AVATAR_BG = { andrew:'var(--purple)', luke:'#C2590A', dave:'#0E7FA8', sarah:'#C2185B', paul:'#047857' };
+  let meetingTimer = null, meetingSeconds = 0;
+
   function openAgenda(id) {
-    alert('Meeting mode — in the real app this opens the live agenda view with timer.');
+    const data = MEETINGS_DATA[id];
+    if (!data) { alert('Meeting data not found.'); return; }
+
+    document.getElementById('mo-meeting-title').textContent = data.title;
+    document.getElementById('mo-meeting-meta').textContent = data.meta;
+
+    // Attendee avatars
+    document.getElementById('mo-attendees').innerHTML = data.attendees.map(a =>
+      `<div class="avatar" style="width:24px;height:24px;font-size:9px;background:${AVATAR_BG[a]};margin-left:-5px;border:2px solid var(--black)">${a[0].toUpperCase()}</div>`
+    ).join('');
+
+    // Render items
+    document.getElementById('mo-agenda-list').innerHTML = data.items.map((item, i) => `
+      <div class="mo-item" data-item-id="${item.id}">
+        <div class="mo-item-row">
+          <button class="mo-item-check" onclick="toggleMoItemDone(this)" title="Mark as discussed"></button>
+          <div class="mo-item-num">${i + 1}</div>
+          <div class="mo-item-body">
+            <div class="mo-item-title">${item.title}</div>
+            <div class="mo-item-source">${item.source}</div>
+          </div>
+          <div class="mo-item-right">
+            <span class="mo-item-dur">${item.dur} min</span>
+            <button class="btn btn-ghost btn-xs" onclick="toggleMoNotes(this)">Notes</button>
+            <button class="btn btn-ghost btn-xs" id="action-btn-${item.id}" onclick="moCreateAction(this, '${item.title.replace(/'/g,"\\'")}', '${item.id}')">⚡ Action</button>
+          </div>
+        </div>
+        <div class="mo-item-notes-panel">
+          <textarea class="form-input form-input-sm" rows="2" placeholder="Notes for this item…" style="margin-top:10px;width:100%"></textarea>
+          <div class="mo-action-badge" id="action-added-${item.id}">✓ Action added to SLT Actions</div>
+        </div>
+      </div>
+    `).join('');
+
+    document.getElementById('mo-items-label').textContent = `${data.items.length} agenda items`;
+    document.getElementById('mo-progress').style.width = '0%';
+
+    // Start timer
+    meetingSeconds = 0;
+    document.getElementById('mo-timer').textContent = '0:00';
+    if (meetingTimer) clearInterval(meetingTimer);
+    meetingTimer = setInterval(() => {
+      meetingSeconds++;
+      const m = Math.floor(meetingSeconds / 60);
+      const s = meetingSeconds % 60;
+      document.getElementById('mo-timer').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+    }, 1000);
+
+    document.getElementById('meeting-overlay').classList.add('open');
+  }
+
+  function toggleMoItemDone(btn) {
+    const item = btn.closest('.mo-item');
+    item.classList.toggle('discussed');
+    const total = document.querySelectorAll('.mo-item').length;
+    const done  = document.querySelectorAll('.mo-item.discussed').length;
+    document.getElementById('mo-progress').style.width = (done / total * 100) + '%';
+    document.getElementById('mo-items-label').textContent =
+      done === total ? `All ${total} items discussed — great meeting! 🎉` :
+      `${done} of ${total} items discussed`;
+  }
+
+  function toggleMoNotes(btn) {
+    const panel = btn.closest('.mo-item').querySelector('.mo-item-notes-panel');
+    const isOpen = panel.classList.toggle('open');
+    btn.textContent = isOpen ? 'Hide notes' : 'Notes';
+    if (isOpen) setTimeout(() => panel.querySelector('textarea')?.focus(), 50);
+  }
+
+  function moCreateAction(btn, title, itemId) {
+    const item = btn.closest('.mo-item');
+    item.querySelector('.mo-item-notes-panel').classList.add('open');
+    const badge = document.getElementById('action-added-' + itemId);
+    if (badge) badge.classList.add('visible');
+    btn.disabled = true;
+    btn.textContent = '✓ Added';
+    btn.style.color = 'var(--green)';
+    btn.style.borderColor = '#D1FAE5';
+  }
+
+  function endMeeting() {
+    if (meetingTimer) { clearInterval(meetingTimer); meetingTimer = null; }
+    const done  = document.querySelectorAll('.mo-item.discussed').length;
+    const total = document.querySelectorAll('.mo-item').length;
+    const m = Math.floor(meetingSeconds / 60);
+    const s = meetingSeconds % 60;
+    document.getElementById('meeting-overlay').classList.remove('open');
+    showMeetingToast(`Meeting ended · ${m}:${s.toString().padStart(2,'0')} · ${done}/${total} items discussed`);
+  }
+
+  function showMeetingToast(msg) {
+    let toast = document.getElementById('meeting-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'meeting-toast';
+      toast.className = 'undo-toast';
+      document.body.appendChild(toast);
+    }
+    toast.innerHTML = `<span>${msg}</span>`;
+    toast.classList.add('visible');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => toast.classList.remove('visible'), 5000);
   }
 
   function openAgendaBuilder(id) {

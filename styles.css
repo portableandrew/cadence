@@ -1817,3 +1817,219 @@ textarea.form-input { resize: vertical; min-height: 70px; }
 .carry-moved { animation: fade-in 0.3s ease; }
 @keyframes fade-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
 
+/* ========================
+   36. WIP ALIGNMENT FIXES
+   ======================== */
+/* Center status-btn & actions vertically (task-meta is hidden so single-line titles) */
+.wip-view .task-card { align-items: center; }
+.wip-view .task-card .status-btn { margin-top: 0; }
+.wip-view .task-card .task-actions { margin-top: 0; flex-direction: row; gap: 2px; }
+/* Remove task count sub-line from person headers */
+.wip-view .person-count { display: none !important; }
+/* + Add task button — full-width with padding, separated by border */
+.person-section > .add-task-btn {
+  display: flex;
+  width: 100%;
+  padding: 9px 16px;
+  margin-top: 0;
+  border-top: 1px solid var(--border);
+  color: var(--mid);
+  font-size: 12px;
+  font-weight: 500;
+  transition: color 0.12s, background 0.12s;
+}
+.person-section > .add-task-btn:hover { color: var(--purple); background: var(--bg); }
+.person-section > .add-task-form {
+  padding: 10px 16px 14px;
+  margin-top: 0;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+  gap: 8px;
+  flex-direction: column;
+}
+
+/* ========================
+   37. FRIDAY UPDATE — SECTION LABELS
+   ======================== */
+/* Make WINS / CHALLENGES / GOALS COMPLETED / QUESTIONS bolder + black */
+.ci-section-label {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--black);
+  margin-bottom: 8px;
+  padding-top: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+/* Goals completed counter badge */
+.ci-goals-counter {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--mid);
+  background: var(--tag-bg);
+  padding: 1px 7px;
+  border-radius: 20px;
+  font-family: 'Space Mono', monospace;
+  letter-spacing: 0;
+  text-transform: none;
+}
+/* Questions section */
+.ci-ask-btn {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--mid);
+  border: 1px solid var(--border);
+  padding: 1px 7px;
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.12s;
+  background: none;
+  text-transform: none;
+}
+.ci-ask-btn:hover { border-color: var(--purple); color: var(--purple); }
+.ci-q-item .ci-item-text { font-style: italic; }
+.ci-q-item .ci-item-text::before { content: 'Q: '; font-weight: 700; font-style: normal; color: var(--mid); }
+.ci-q-compose { padding: 8px 0 4px; }
+.ci-q-compose .form-input-sm { width: 100%; }
+
+/* ========================
+   38. PAST-MEETING OPEN STATE FIX
+   ======================== */
+.past-meeting-body.open { display: block; }
+
+/* ========================
+   39. MEETING MODE OVERLAY
+   ======================== */
+.meeting-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--white);
+  flex-direction: column;
+}
+.meeting-overlay.open { display: flex; }
+.mo-header {
+  background: var(--black);
+  color: var(--white);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-shrink: 0;
+}
+.mo-title-group { flex: 1; min-width: 0; }
+.mo-meeting-title { font-size: 16px; font-weight: 800; color: var(--white); line-height: 1.2; }
+.mo-meeting-meta { font-size: 11px; color: rgba(255,255,255,0.45); margin-top: 2px; }
+.mo-timer {
+  font-family: 'Space Mono', monospace;
+  font-size: 22px;
+  font-weight: 700;
+  color: #E8E8E8;
+  min-width: 58px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.mo-attendees-wrap { display: flex; align-items: center; flex-shrink: 0; }
+.mo-progress-bar { height: 3px; background: rgba(255,255,255,0.1); flex-shrink: 0; }
+.mo-progress-fill { height: 100%; background: #E8E8E8; transition: width 0.4s ease; }
+.mo-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 28px;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+.mo-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--mid);
+  margin-bottom: 12px;
+}
+.mo-item {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+.mo-item:hover { border-color: #CCCCCC; }
+.mo-item.discussed { border-color: #D1FAE5; background: #F9FEFB; opacity: 0.7; }
+.mo-item-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+}
+.mo-item-check {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 2px solid #CCCCCC;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex; align-items: center; justify-content: center;
+  background: transparent;
+  padding: 0;
+}
+.mo-item-check:hover { border-color: #166534; }
+.mo-item.discussed .mo-item-check { background: #4ade80; border-color: #4ade80; }
+.mo-item.discussed .mo-item-check::after {
+  content: '';
+  display: block;
+  width: 10px; height: 6px;
+  border-left: 2.5px solid #1a5c00;
+  border-bottom: 2.5px solid #1a5c00;
+  transform: rotate(-45deg) translate(1px, -1px);
+}
+.mo-item-num {
+  font-size: 10px; font-weight: 700; color: var(--mid);
+  background: var(--tag-bg); border-radius: 4px;
+  width: 20px; height: 20px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-family: 'Space Mono', monospace;
+}
+.mo-item.discussed .mo-item-num { opacity: 0.4; }
+.mo-item-body { flex: 1; min-width: 0; }
+.mo-item-title { font-size: 13px; font-weight: 600; color: var(--black); line-height: 1.35; }
+.mo-item.discussed .mo-item-title { text-decoration: line-through; color: var(--mid); }
+.mo-item-source { font-size: 11px; color: var(--mid); margin-top: 2px; }
+.mo-item-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.mo-item-dur {
+  font-size: 10px; color: var(--mid);
+  background: var(--tag-bg); padding: 2px 8px;
+  border-radius: 20px; white-space: nowrap;
+  font-family: 'Space Mono', monospace;
+}
+.mo-item-notes-panel {
+  display: none;
+  padding: 0 14px 14px 46px;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+}
+.mo-item-notes-panel.open { display: block; }
+.mo-item-notes-panel textarea { margin-top: 10px; width: 100%; }
+.mo-action-badge {
+  display: none;
+  margin-top: 6px;
+  font-size: 11px; font-weight: 600; color: #166534;
+  background: #F0FDF4; border: 1px solid #D1FAE5;
+  padding: 3px 10px; border-radius: 4px;
+  width: fit-content;
+}
+.mo-action-badge.visible { display: block; }
+.mo-done-banner {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--mid);
+  font-size: 14px;
+  font-style: italic;
+}
+
