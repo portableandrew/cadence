@@ -142,6 +142,13 @@ function cycleStatus(btn) {
   if (card) {
     cardClasses.forEach(c => { if (c) card.classList.remove(c); });
     if (cardClasses[next]) card.classList.add(cardClasses[next]);
+    // Flash green feedback when marking done
+    if (states[next] === 'done') {
+      card.classList.remove('done-flash');
+      void card.offsetWidth; // reflow to restart animation
+      card.classList.add('done-flash');
+      setTimeout(() => card.classList.remove('done-flash'), 650);
+    }
   }
 
   // Update status badge if present

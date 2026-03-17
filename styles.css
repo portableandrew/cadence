@@ -2033,3 +2033,149 @@ textarea.form-input { resize: vertical; min-height: 70px; }
   font-style: italic;
 }
 
+/* ========================
+   40. HOVER, TRANSITIONS & FEEDBACK ANIMATIONS
+   ======================== */
+
+/* ── Buttons ── */
+.btn { transition: background 0.12s, border-color 0.12s, color 0.12s, transform 0.08s, box-shadow 0.12s; }
+.btn:active:not(:disabled) { transform: scale(0.96); }
+.btn-primary:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+.btn-ghost:hover   { box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
+
+/* ── Status buttons ── */
+.status-btn { transition: border-color 0.15s, background 0.15s, transform 0.08s, box-shadow 0.12s; }
+.status-btn:hover { box-shadow: 0 0 0 3px rgba(0,0,0,0.07); }
+.status-btn:active { transform: scale(0.78); }
+
+/* ── Task cards ── */
+.task-card { transition: border-color 0.12s, box-shadow 0.12s, background 0.12s; }
+.task-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+@keyframes flash-green { 0%,15% { background: #F0FDF4; } 100% { background: var(--white); } }
+.task-card.done-flash { animation: flash-green 0.6s ease; }
+
+/* ── Person sections ── */
+.person-section { transition: box-shadow 0.15s; }
+.person-section:hover { box-shadow: 0 3px 14px rgba(0,0,0,0.06); }
+
+/* ── Add task button ── */
+.person-section > .add-task-btn { transition: color 0.12s, background 0.12s; }
+
+/* ── Carry-over items ── */
+.carry-over-item { transition: border-color 0.12s, box-shadow 0.12s, opacity 0.12s; }
+.carry-over-item:hover { border-color: #CCCCCC; box-shadow: 0 2px 6px rgba(0,0,0,0.05); opacity: 1 !important; }
+
+/* ── Check-in items ── */
+.ci-item { transition: background 0.1s; border-radius: 4px; }
+.ci-item:hover { background: var(--bg); }
+.ci-item.win-item:hover       { background: #E8FBF0; }
+.ci-item.challenge-item:hover { background: #FEF5E2; }
+
+/* ── Checkin cards ── */
+.checkin-card { transition: box-shadow 0.15s; }
+.checkin-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
+
+/* ── Agenda request cards ── */
+.agenda-request-card { transition: border-color 0.12s, box-shadow 0.12s; }
+.agenda-request-card:hover { border-color: #CCCCCC; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+
+/* ── Goal cards ── */
+.goal-card { transition: border-color 0.12s, box-shadow 0.12s; }
+.goal-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+
+/* ── Wip prompt ── */
+.wip-prompt { transition: border-color 0.15s, box-shadow 0.15s; }
+.wip-prompt:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+
+/* ── Review toggle ── */
+.review-toggle { transition: border-color 0.15s, color 0.15s, background 0.15s; }
+
+/* ── Form inputs ── */
+.form-input { transition: border-color 0.12s, box-shadow 0.12s; }
+
+/* ── Modals — spring slide-in ── */
+.modal-overlay.open .modal {
+  animation: modal-spring 0.22s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+@keyframes modal-spring {
+  from { opacity: 0; transform: translateY(-12px) scale(0.96); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ── Meeting overlay ── */
+.meeting-overlay.open .mo-header { animation: mo-head-in 0.2s ease; }
+@keyframes mo-head-in { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:none; } }
+.meeting-overlay.open .mo-body   { animation: mo-body-in 0.25s ease 0.07s both; }
+@keyframes mo-body-in { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+
+/* ── Meeting item mark-discussed transition ── */
+.mo-item { transition: border-color 0.2s, background 0.2s, opacity 0.3s; }
+.mo-item-title { transition: color 0.2s, text-decoration 0.2s; }
+.mo-item-check { transition: border-color 0.15s, background 0.15s, transform 0.08s; }
+.mo-item-check:active { transform: scale(0.8); }
+
+/* ── Action table row flash ── */
+@keyframes row-flash-green { 0%,15% { background: #F0FDF4; } 100% { background: transparent; } }
+.at-row-flash td { animation: row-flash-green 0.65s ease; }
+
+/* ── Action status-btn in table ── */
+.action-table .status-btn { cursor: pointer; }
+.action-table .status-btn { transition: border-color 0.15s, background 0.15s, transform 0.08s, box-shadow 0.12s; }
+
+/* ── New item slide-in ── */
+@keyframes item-slide-in { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:none; } }
+
+/* ── Input shake (validation error) ── */
+@keyframes input-shake { 0%,100%{transform:none} 20%{transform:translateX(-5px)} 60%{transform:translateX(5px)} 80%{transform:translateX(-2px)} }
+.input-shake { animation: input-shake 0.35s ease; border-color: #DC2626 !important; }
+
+/* ── Tag transitions ── */
+.tag { transition: background 0.1s, color 0.1s; }
+
+/* ── Past meeting row open indicator ── */
+.past-meeting-row:has(+ .past-meeting-body.open) { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+
+/* ========================
+   41. AGENDA EDITOR
+   ======================== */
+.ae-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 16px;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.1s;
+  animation: item-slide-in 0.12s ease;
+}
+.ae-item:last-child { border-bottom: none; }
+.ae-item:hover { background: var(--bg); }
+.ae-drag-handle {
+  color: #CCCCCC; cursor: grab; font-size: 14px;
+  user-select: none; opacity: 0; flex-shrink: 0;
+  padding: 0 2px; line-height: 1;
+  transition: opacity 0.1s, color 0.1s;
+}
+.ae-item:hover .ae-drag-handle { opacity: 1; }
+.ae-drag-handle:hover { color: var(--mid); }
+.ae-drag-handle:active { cursor: grabbing; }
+.ae-item.ae-dragging { opacity: 0.3; background: var(--tag-bg); }
+.ae-item.ae-drop-above { border-top: 2px solid var(--black) !important; }
+.ae-item.ae-drop-below { border-bottom: 2px solid var(--black) !important; }
+.ae-num {
+  font-size: 10px; font-weight: 700; color: var(--mid);
+  background: var(--tag-bg); border-radius: 4px;
+  width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-family: 'Space Mono', monospace;
+}
+.ae-title-input { flex: 1; min-width: 0; }
+.ae-dur-wrap { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+.ae-dur-input { width: 60px; text-align: center; }
+.ae-dur-label { font-size: 11px; color: var(--mid); font-weight: 600; white-space: nowrap; }
+.ae-delete-btn {
+  font-size: 16px; color: #CCCCCC; line-height: 1;
+  padding: 2px 6px; border-radius: 4px; flex-shrink: 0;
+  opacity: 0; transition: color 0.12s, background 0.12s, opacity 0.1s;
+}
+.ae-item:hover .ae-delete-btn { opacity: 1; }
+.ae-delete-btn:hover { color: #991B1B; background: #FEE2E2; }
+

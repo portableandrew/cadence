@@ -374,6 +374,40 @@
 </div>
 
 <!-- ══════════════════════════════════════════
+     AGENDA EDITOR MODAL
+     ══════════════════════════════════════════ -->
+<div class="modal-overlay" id="agenda-editor-modal">
+  <div class="modal" style="max-width:580px">
+    <div class="modal-header">
+      <div>
+        <h2 id="ae-meeting-title">Edit agenda</h2>
+        <div class="modal-sub" id="ae-meeting-meta"></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <span style="font-size:11px;font-weight:700;color:var(--mid)" id="ae-total-time"></span>
+        <button class="modal-close" onclick="closeModal('agenda-editor-modal')">×</button>
+      </div>
+    </div>
+    <!-- Items list -->
+    <div id="ae-items-list" style="border-bottom:1px solid var(--border)"></div>
+    <!-- Add new item row -->
+    <div style="display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--border);background:var(--bg)">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--mid)" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <input type="text" class="form-input form-input-sm" id="ae-new-title" placeholder="New agenda item…" style="flex:1">
+      <div class="ae-dur-wrap">
+        <input type="number" class="ae-dur-input form-input form-input-sm" id="ae-new-dur" placeholder="10" min="1" max="180" style="width:58px;text-align:center">
+        <span class="ae-dur-label">min</span>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="aeAddItem()">Add</button>
+    </div>
+    <div class="modal-footer" style="justify-content:space-between">
+      <span style="font-size:11px;color:var(--mid)">Drag rows to reorder</span>
+      <button class="btn btn-primary btn-sm" onclick="closeModal('agenda-editor-modal')">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
      MEETING MODE OVERLAY
      ══════════════════════════════════════════ -->
 <div class="meeting-overlay" id="meeting-overlay">
@@ -548,9 +582,118 @@
     toast._t = setTimeout(() => toast.classList.remove('visible'), 5000);
   }
 
+  // ── AGENDA EDITOR ─────────────────────────────────────────────
+  let aeCurrentMeeting = null;
+
   function openAgendaBuilder(id) {
-    alert('Agenda builder — in the real app this opens the agenda editor for this meeting.');
+    aeCurrentMeeting = id;
+    const data = MEETINGS_DATA[id];
+    if (!data) return;
+    document.getElementById('ae-meeting-title').textContent = `Edit agenda — ${data.title}`;
+    document.getElementById('ae-meeting-meta').textContent = data.meta;
+    renderAeItems();
+    openModal('agenda-editor-modal');
   }
+
+  function renderAeItems() {
+    const data = MEETINGS_DATA[aeCurrentMeeting];
+    const list = document.getElementById('ae-items-list');
+    if (!data.items.length) {
+      list.innerHTML = `<div style="padding:28px;text-align:center;color:var(--mid);font-size:13px;font-style:italic">No agenda items yet — add one below.</div>`;
+      return;
+    }
+    list.innerHTML = data.items.map((item, i) => `
+      <div class="ae-item" data-ae-id="${item.id}">
+        <span class="ae-drag-handle" title="Drag to reorder">⠿</span>
+        <span class="ae-num">${i + 1}</span>
+        <input type="text" class="ae-title-input form-input form-input-sm" value="${item.title.replace(/"/g,'&quot;')}"
+               onchange="aeUpdateItem('${aeCurrentMeeting}','${item.id}','title',this.value)"
+               onblur="aeUpdateItem('${aeCurrentMeeting}','${item.id}','title',this.value)">
+        <div class="ae-dur-wrap">
+          <input type="number" class="ae-dur-input form-input form-input-sm" value="${item.dur}" min="1" max="180"
+                 onchange="aeUpdateItem('${aeCurrentMeeting}','${item.id}','dur',parseInt(this.value)||item.dur)"
+                 onblur="aeUpdateItem('${aeCurrentMeeting}','${item.id}','dur',parseInt(this.value)||${item.dur})">
+          <span class="ae-dur-label">min</span>
+        </div>
+        <button class="ae-delete-btn" onclick="aeDeleteItem('${aeCurrentMeeting}','${item.id}')" title="Remove item">×</button>
+      </div>
+    `).join('');
+    setupAeDrag(list);
+    updateAeTotalTime();
+  }
+
+  function updateAeTotalTime() {
+    const data = MEETINGS_DATA[aeCurrentMeeting];
+    const total = data.items.reduce((sum, x) => sum + (x.dur || 0), 0);
+    const el = document.getElementById('ae-total-time');
+    if (el) el.textContent = `Total: ${total} min`;
+  }
+
+  function aeUpdateItem(meetingId, itemId, field, value) {
+    const item = MEETINGS_DATA[meetingId]?.items.find(x => x.id === itemId);
+    if (item) { item[field] = value; updateAeTotalTime(); }
+  }
+
+  function aeDeleteItem(meetingId, itemId) {
+    const data = MEETINGS_DATA[meetingId];
+    if (!data) return;
+    data.items = data.items.filter(x => x.id !== itemId);
+    renderAeItems();
+  }
+
+  function aeAddItem() {
+    const titleEl = document.getElementById('ae-new-title');
+    const durEl   = document.getElementById('ae-new-dur');
+    const title   = titleEl.value.trim();
+    if (!title) { titleEl.focus(); titleEl.classList.add('input-shake'); setTimeout(() => titleEl.classList.remove('input-shake'), 400); return; }
+    const dur = parseInt(durEl.value) || 10;
+    const data = MEETINGS_DATA[aeCurrentMeeting];
+    data.items.push({ id: aeCurrentMeeting + '_' + Date.now(), title, source: 'Custom item', dur });
+    titleEl.value = '';
+    durEl.value   = '';
+    renderAeItems();
+    titleEl.focus();
+  }
+
+  function setupAeDrag(list) {
+    let dragSrcAe = null;
+    list.querySelectorAll('.ae-item').forEach(item => {
+      const handle = item.querySelector('.ae-drag-handle');
+      if (!handle) return;
+      handle.addEventListener('mousedown', () => item.setAttribute('draggable', 'true'));
+      handle.addEventListener('mouseup',   () => item.setAttribute('draggable', 'false'));
+      item.addEventListener('dragstart', () => {
+        dragSrcAe = item;
+        setTimeout(() => item.classList.add('ae-dragging'), 0);
+      });
+      item.addEventListener('dragend', () => {
+        item.classList.remove('ae-dragging');
+        item.setAttribute('draggable', 'false');
+        list.querySelectorAll('.ae-item').forEach(i => i.classList.remove('ae-drop-above', 'ae-drop-below'));
+        dragSrcAe = null;
+        // Sync order back to MEETINGS_DATA
+        const data = MEETINGS_DATA[aeCurrentMeeting];
+        const newOrder = [...list.querySelectorAll('.ae-item')].map(el => el.dataset.aeId);
+        data.items = newOrder.map(id => data.items.find(x => x.id === id)).filter(Boolean);
+        renderAeItems();
+      });
+      item.addEventListener('dragover', e => {
+        e.preventDefault();
+        if (!dragSrcAe || dragSrcAe === item) return;
+        list.querySelectorAll('.ae-item').forEach(i => i.classList.remove('ae-drop-above', 'ae-drop-below'));
+        const mid = item.getBoundingClientRect().top + item.offsetHeight / 2;
+        if (e.clientY < mid) { item.classList.add('ae-drop-above'); list.insertBefore(dragSrcAe, item); }
+        else                 { item.classList.add('ae-drop-below'); list.insertBefore(dragSrcAe, item.nextSibling); }
+      });
+      item.addEventListener('drop', e => { e.preventDefault(); list.querySelectorAll('.ae-item').forEach(i => i.classList.remove('ae-drop-above','ae-drop-below')); });
+    });
+    // Allow Enter to add new item
+    document.getElementById('ae-new-title')?.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); aeAddItem(); } });
+    document.getElementById('ae-new-dur')?.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); aeAddItem(); } });
+  }
+
+  function openModal(id) { document.getElementById(id)?.classList.add('open'); }
+  function closeModal(id) { document.getElementById(id)?.classList.remove('open'); }
 </script>
 </body>
 </html>
